@@ -1,3 +1,0 @@
-route -n add -net 172.17.0.0/16 172.16.33.10
-
-docker run --name base_default_1414876257 -d -p 2222:22 -v /var/lib/docker/docker_1414876256_87805:/vagrant 2fbd346b5ad7
