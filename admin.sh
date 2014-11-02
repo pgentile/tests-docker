@@ -6,9 +6,11 @@ usage() {
 Usage: admin.sh COMMANDE
 
 Commandes:
-    purge: Purger les containers arrêtés
-    ipurge: Purger les images sans repository
-
+    purge               Purger les containers arrêtés
+    ipurge              Purger les images sans repository
+    ip CONTAINER...     Adresse
+    console CONTAINER   Lancer une console dans un container
+    stopall             Arrêter tous les containers
 EOF
 }
 
@@ -30,12 +32,39 @@ purge_images() {
 }
 
 
+container_ip() {
+    typeset containers="$*"
+    docker inspect -f '{{ .NetworkSettings.IPAddress }}' $containers
+}
+
+
+console() {
+    typeset container="$1"
+    exec docker exec -i -t $container /bin/bash
+}
+
+
+stopall() {
+    docker stop $(docker ps -q)
+}
+
+
 case "$1" in
     purge)
         purge_containers
         ;;
     ipurge)
         purge_images
+        ;;
+    ip)
+        shift
+        container_ip $@
+        ;;
+    console)
+        console $2
+        ;;
+    stopall)
+        stopall
         ;;
     -h | --help | '')
         usage
