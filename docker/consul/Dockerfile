@@ -18,4 +18,5 @@ RUN useradd -r -M -U -d /usr/local/var/consul consul \
 
 USER consul
 
-EXPOSE 8300 8301 8302 8400 8500 8600
+# Voir les ports sur https://consul.io/docs/agent/options.html
+EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
