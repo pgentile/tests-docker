@@ -21,6 +21,9 @@ RUN unzip -d /tmp/consul-ui /tmp/ui.zip \
 RUN mkdir -p /usr/local/etc/consul.d
 COPY ./conf/consul.json /usr/local/etc/consul.d/
 
+# Users
+RUN groupadd -r consul && useradd -r -g consul -M consul
+
 # Données générées par l'agent
 VOLUME /usr/local/var/consul
 
@@ -28,4 +31,5 @@ VOLUME /usr/local/var/consul
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
 
 # Démarrer Consul en tant qu'agent
-ENTRYPOINT ["consul", "agent", "-config-dir", "/usr/local/etc/consul.d"]
+ADD ./entrypoint.py /entrypoint.py
+ENTRYPOINT ["/entrypoint.py"]
