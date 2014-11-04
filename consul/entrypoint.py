@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import grp
 import pwd
 import os
 import sys
@@ -15,8 +14,10 @@ user = pwd.getpwnam("consul")
 os.chown("/usr/local/var/consul", user.pw_uid, user.pw_gid)
 
 
-# Lancer Consul en tant qu'user consul
+# Lancer Consul en droppant les privilèges root
 
+if hasattr(os, 'setgroups'):
+    os.setgroups([user.pw_gid])
 os.setgid(user.pw_gid)
 os.setuid(user.pw_uid)
 
