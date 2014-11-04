@@ -45,7 +45,7 @@ console() {
 }
 
 
-stopall() {
+stop_all() {
     docker stop $(docker ps -q)
 }
 
@@ -65,7 +65,7 @@ case "$1" in
         console $2
         ;;
     stopall)
-        stopall
+        stop_all
         ;;
     -h | --help | '')
         usage
