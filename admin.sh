@@ -41,7 +41,7 @@ container_ip() {
 
 console() {
     typeset container="$1"
-    exec docker exec -i -t $container /bin/bash
+    exec docker exec -i -t $container /bin/bash -l
 }
 
 
