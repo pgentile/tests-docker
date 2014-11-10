@@ -4,15 +4,17 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 # Pour installer Consul
 RUN yum install -y unzip
 
+ENV CONSUL_VERSION 0.4.1
+
 # Installer le binaire Consul
-ADD https://dl.bintray.com/mitchellh/consul/0.4.1_linux_amd64.zip /tmp/consul.zip
-RUN unzip -d /tmp/consul /tmp/consul.zip \
+RUN curl -L -o /tmp/consul.zip https://dl.bintray.com/mitchellh/consul/${CONSUL_VERSION}_linux_amd64.zip \
+    && unzip -d /tmp/consul /tmp/consul.zip \
     && mv /tmp/consul/consul /usr/local/bin/ \
     && rm -fr /tmp/consul /tmp/consul.zip
 
 # Installer l'interface Web
-ADD https://dl.bintray.com/mitchellh/consul/0.4.1_web_ui.zip /tmp/ui.zip
-RUN unzip -d /tmp/consul-ui /tmp/ui.zip \
+RUN curl -L -o /tmp/ui.zip https://dl.bintray.com/mitchellh/consul/${CONSUL_VERSION}_web_ui.zip \
+    && unzip -d /tmp/consul-ui /tmp/ui.zip \
     && mkdir -p /usr/local/share/consul/ui \
     && cp -r /tmp/consul-ui/dist/* /usr/local/share/consul/ui/ \
     && rm -fr /tmp/consul-ui /tmp/ui.zip
