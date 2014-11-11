@@ -1,8 +1,9 @@
-FROM centos:centos7
+FROM debian:wheezy
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Pour installer Consul
-RUN yum install -y unzip
+RUN apt-get -q update \
+    && apt-get -q install -y python2.7 unzip curl
 
 ENV CONSUL_VERSION 0.4.1
 

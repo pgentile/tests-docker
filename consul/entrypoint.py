@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 # -*- coding: utf8 -*-
 
 import pwd
@@ -16,8 +16,7 @@ os.chown("/usr/local/var/consul", user.pw_uid, user.pw_gid)
 
 # Lancer Consul en droppant les privilèges root
 
-if hasattr(os, 'setgroups'):
-    os.setgroups([user.pw_gid])
+os.setgroups([user.pw_gid])
 os.setgid(user.pw_gid)
 os.setuid(user.pw_uid)
 
