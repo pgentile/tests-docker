@@ -46,7 +46,10 @@ console() {
 
 
 stop_all() {
-    docker stop $(docker ps -q)
+    docker ps -q | while read container
+    do
+        docker stop $container
+    done
 }
 
 
