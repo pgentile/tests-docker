@@ -7,7 +7,7 @@ RUN apt-get -q update \
 
 RUN pip -v install graphite-api gunicorn gevent
 
-ADD ./conf/graphite-api.yaml ./conf/gunicorn.py /usr/local/etc/
+ADD ./conf/graphite-api.yaml ./conf/gunicorn.py /etc/
 
 # Répertoire pour l'index Graphite
 RUN mkdir -p /var/cache/graphite
@@ -15,5 +15,5 @@ RUN mkdir -p /var/cache/graphite
 # Données Whisper
 VOLUME /var/local/whisper
 
-ENV GRAPHITE_API_CONFIG /usr/local/etc/graphite-api.yaml
-ENTRYPOINT gunicorn -c /usr/local/etc/gunicorn.py graphite_api.app:app
+ENV GRAPHITE_API_CONFIG /etc/graphite-api.yaml
+ENTRYPOINT ["gunicorn", "-c", "/etc/gunicorn.py", "graphite_api.app:app"]
