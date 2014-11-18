@@ -21,14 +21,13 @@ RUN curl -L -o /tmp/ui.zip https://dl.bintray.com/mitchellh/consul/${CONSUL_VERS
     && rm -fr /tmp/consul-ui /tmp/ui.zip
 
 # Config de base
-RUN mkdir -p /usr/local/etc/consul.d
 COPY ./conf/consul.json /usr/local/etc/consul.d/
 
 # Users
 RUN groupadd -r consul && useradd -r -g consul -M consul
 
 # Données générées par l'agent
-VOLUME /usr/local/var/consul
+VOLUME /var/local/consul
 
 # Voir les ports sur https://consul.io/docs/agent/options.html
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp

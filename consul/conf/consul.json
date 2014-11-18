@@ -1,5 +1,5 @@
 {
   "ui_dir": "/usr/local/share/consul/ui",
-  "data_dir": "/usr/local/var/consul",
+  "data_dir": "/var/local/consul",
   "client_addr": "0.0.0.0"
 }

@@ -11,7 +11,7 @@ user = pwd.getpwnam("consul")
 
 # Modifier les doits sur le répertoire des données
 
-os.chown("/usr/local/var/consul", user.pw_uid, user.pw_gid)
+os.chown("/var/local/consul", user.pw_uid, user.pw_gid)
 
 
 # Lancer Consul en droppant les privilèges root
