@@ -12,6 +12,7 @@ Commandes:
     ip CONTAINER...     Adresse
     console CONTAINER   Lancer une console dans un container
     stopall             Arrêter tous les containers
+    purgeall            Purger tout ce qui peut l'être
 EOF
 }
 
@@ -69,6 +70,10 @@ case "$1" in
         ;;
     stopall)
         stop_all
+        ;;
+    purgeall)
+        purge_containers
+        purge_images
         ;;
     -h | --help | '')
         usage
