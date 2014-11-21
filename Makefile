@@ -1,4 +1,4 @@
-IMAGES=consul graphite-api
+IMAGES=consul graphite-api python-wheel-onbuild
 
 all: $(IMAGES)
 
