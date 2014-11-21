@@ -1,8 +1,10 @@
-IMAGES=consul graphite-api python-wheel-onbuild
+IMAGES=consul graphite-api python-wheel-onbuild graphite-api-builder
 
 all: $(IMAGES)
 
 $(IMAGES):
-	docker build -t ${USER}/$@ $@
+	docker build -t pgentile/$@ $@
 
 .PHONY: $(IMAGES)
+
+graphite-api-builder: python-wheel-onbuild
