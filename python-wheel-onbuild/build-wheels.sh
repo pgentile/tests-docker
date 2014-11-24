@@ -1,3 +1,4 @@
 #!/bin/bash -e
 
-exec pip wheel -r /tmp/requirements.txt --wheel-dir /var/local/wheels/
+pip wheel -r /tmp/requirements.txt --wheel-dir /var/local/wheels/
+cp /tmp/requirements.txt /var/local/wheels/

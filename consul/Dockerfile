@@ -3,7 +3,7 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Pour installer Consul
 RUN apt-get -q update \
-    && apt-get -q install -y python2.7 unzip curl
+    && apt-get -q install -y python2.7-minimal unzip curl
 
 ENV CONSUL_VERSION 0.4.1
 
@@ -26,6 +26,9 @@ COPY ./conf/consul.json /etc/consul.d/
 # Users
 RUN groupadd -r consul && useradd -r -g consul -M consul
 
+# Script de lancement
+ADD ./entrypoint.py /usr/bin/entrypoint.py
+
 # Données générées par l'agent
 VOLUME /var/consul
 
@@ -33,5 +36,4 @@ VOLUME /var/consul
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
 
 # Démarrer Consul en tant qu'agent
-ADD ./entrypoint.py /usr/bin/entrypoint.py
 ENTRYPOINT ["/usr/bin/entrypoint.py"]
