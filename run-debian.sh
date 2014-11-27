@@ -1,3 +1,3 @@
 #!/bin/bash
 
-exec docker run --rm -i -t debian:wheezy /bin/bash -l
+exec docker run -i -t debian:wheezy /bin/bash -l
