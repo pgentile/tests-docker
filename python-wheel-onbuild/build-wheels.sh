@@ -1,4 +1,9 @@
 #!/bin/bash -e
 
-pip wheel -r /tmp/requirements.txt --wheel-dir /var/local/wheels/
-cp /tmp/requirements.txt /var/local/wheels/
+pip wheel --wheel-dir /var/local/wheels/ $@
+
+echo >/var/local/wheels/requirements.txt
+for name in $@
+do
+    echo $name >>/var/local/wheels/requirements.txt
+done

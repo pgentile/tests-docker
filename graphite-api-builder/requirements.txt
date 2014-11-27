@@ -1,5 +1,0 @@
-graphite-api
-gunicorn
-gevent
-supervisor
-carbon

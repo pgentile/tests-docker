@@ -1,22 +1,16 @@
-FROM debian:wheezy
+FROM pgentile/python-base
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-# Dépendances nécessaires à l'install de Graphite
-RUN apt-get -q update \
-    && apt-get -q install -y python2.7-dev build-essential libcairo2-dev libffi-dev python-pip git
+# Dépendances nécessaires à l'exécution de Graphite
+RUN apt-get -q install -y libcairo2 libffi5 libyaml-0-2
 
-RUN pip -v install graphite-api gunicorn gevent supervisor
+ADD ./wheels/ /tmp/wheels/
 
-ADD ./install-carbon.sh /tmp/
-RUN /tmp/install-carbon.sh
+RUN pip install -r /tmp/wheels/requirements.txt --find-links /tmp/wheels/ --no-index \
+    && rm -fr /tmp/wheels
 
-ADD ./conf/graphite-api.yaml ./conf/gunicorn.py /etc/
-
-# Répertoire pour l'index Graphite
 RUN mkdir -p /var/cache/graphite
 
-# Données Whisper
-VOLUME /var/local/whisper
+ADD ./conf/gunicorn.conf.py ./conf/graphite-api.yaml /etc/
 
-ENV GRAPHITE_API_CONFIG /etc/graphite-api.yaml
-ENTRYPOINT ["gunicorn", "-c", "/etc/gunicorn.py", "graphite_api.app:app"]
+ENTRYPOINT ["gunicorn", "--config", "/etc/gunicorn.conf.py", "graphite_api.app:app"]

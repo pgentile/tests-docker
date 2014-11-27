@@ -12,5 +12,4 @@ ADD build-wheels.sh install-packages.sh /tmp/
 ONBUILD ADD apt-packages.txt /tmp/
 ONBUILD RUN ["/tmp/install-packages.sh"]
 
-ONBUILD ADD requirements.txt /tmp/
 ONBUILD ENTRYPOINT ["/tmp/build-wheels.sh"]
