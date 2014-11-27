@@ -13,4 +13,8 @@ RUN mkdir -p /var/cache/graphite
 
 ADD ./conf/gunicorn.conf.py ./conf/graphite-api.yaml /etc/
 
+VOLUME ["/var/local/whisper"]
+
+EXPOSE 8080
+
 ENTRYPOINT ["gunicorn", "--config", "/etc/gunicorn.conf.py", "graphite_api.app:app"]
