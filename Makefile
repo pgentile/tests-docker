@@ -7,7 +7,7 @@ all:
 
 # Construction des images de base
 
-IMAGES=consul python-base python-wheel-onbuild graphite-api-builder
+IMAGES=consul python-base python-wheel-onbuild graphite-api-builder grafana
 
 all: $(IMAGES)
 
