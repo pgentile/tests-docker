@@ -1,8 +1,7 @@
-FROM debian:wheezy
+FROM pgentile/debian
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get -q update \
-    && apt-get -q install -y ca-certificates wget tar nginx-light
+RUN apt-get -q install -y ca-certificates wget tar nginx-light
 
 ENV GRAFANA_VERSION 1.8.1
 

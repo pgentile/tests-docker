@@ -1,9 +1,8 @@
-FROM debian:wheezy
+FROM pgentile/debian
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Pour installer Consul
-RUN apt-get -q update \
-    && apt-get -q install -y python2.7-minimal unzip curl
+RUN apt-get -q install -y python2.7-minimal unzip curl
 
 ENV CONSUL_VERSION 0.4.1
 
