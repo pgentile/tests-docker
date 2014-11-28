@@ -1,7 +1,8 @@
-FROM pgentile/python-base
+FROM debian:wheezy
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get -q install -y nginx-light
+RUN apt-get -q update \
+    && apt-get -q install -y ca-certificates wget tar nginx-light
 
 ENV GRAFANA_VERSION 1.8.1
 
@@ -15,8 +16,11 @@ RUN mkdir /tmp/grafana \
 RUN rm -fr /etc/nginx/conf.d /etc/nginx/sites-avalaible /etc/nginx/sites-enabled
 ADD ./conf/nginx.conf /etc/nginx/
 
+# Script de lancement
+ADD ./entrypoint.sh /usr/bin/entrypoint.sh
+
 EXPOSE 8080
 
 VOLUME ["/var/log/nginx"]
 
-ENTRYPOINT ["nginx"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
