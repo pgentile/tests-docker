@@ -12,3 +12,5 @@ graphite:
 elasticsearch:
   image: pgentile/elasticsearch
   command: -Des.cluster.name=grafana -Des.node.name=grafana -Des.index.number_of_replicas=0
+  ports:
+    - "9200:9200"
