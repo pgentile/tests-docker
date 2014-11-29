@@ -6,5 +6,5 @@ functions:
   - graphite_api.functions.PieFunctions
 whisper:
   directories:
-    - /var/local/whisper
+    - /var/lib/whisper
 time_zone: Europe/Paris
