@@ -7,3 +7,9 @@ RUN echo "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable 
     && wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | apt-key add - \
     && apt-get -y update \
     && apt-get -y install elasticsearch
+
+ADD ./conf /usr/share/elasticsearch/config
+
+EXPOSE 9200
+
+ENTRYPOINT ["/usr/share/elasticsearch/bin/elasticsearch"]
