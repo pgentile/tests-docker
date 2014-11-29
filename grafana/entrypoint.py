@@ -8,6 +8,8 @@ import string
 
 # Configurer Nginx
 
+print "Configuration de nginx..."
+
 graphite_host = os.environ['GRAPHITE_PORT_8080_TCP_ADDR']
 graphite_port = os.environ['GRAPHITE_PORT_8080_TCP_PORT']
 
@@ -20,6 +22,8 @@ with open('/etc/nginx/nginx.conf.template') as input_f, open('/etc/nginx/nginx.c
 
 
 # Lancer nginx
+
+print "Lancement de nginx..."
 
 binary = "/usr/sbin/nginx"
 args = [binary] + sys.argv[1:]
