@@ -1,0 +1,8 @@
+grafana:
+  image: pgentile/grafana
+  links:
+    - "graphite:graphite"
+  ports:
+    - "80:8080"
+graphite:
+  image: pgentile/graphite-api
