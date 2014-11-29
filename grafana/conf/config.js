@@ -16,16 +16,14 @@ function (Settings) {
     datasources: {
       graphite: {
         type: 'graphite',
-        url: "http://" + location.hostname + "/graphite" ,
+        url: "http://" + location.hostname + "/graphite",
       },
-      /*
       elasticsearch: {
         type: 'elasticsearch',
-        url: "http://my.elastic.server.com:9200",
+        url: "http://" + location.hostname + "/elasticsearch",
         index: 'grafana-dash',
         grafanaDB: true,
-      }
-      */
+      },
     },
 
     /* Global configuration options

@@ -1,8 +1,13 @@
 grafana:
   image: pgentile/grafana
   links:
-    - "graphite:graphite"
+    - graphite
+    - elasticsearch
   ports:
     - "80:8080"
+
 graphite:
   image: pgentile/graphite-api
+
+elasticsearch:
+  image: pgentile/elasticsearch

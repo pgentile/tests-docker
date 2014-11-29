@@ -53,6 +53,10 @@ http {
         server $graphite_host:$graphite_port;
     }
     
+    upstream elasticsearch {
+        server $elasticsearch_host:$elasticsearch_port;
+    }
+    
     server {
     	listen   8080; ## listen for ipv4;
     	#listen   [::]:80 default_server ipv6only=on; ## listen for ipv6
@@ -73,6 +77,12 @@ http {
         
         location /graphite/ {
             proxy_pass http://graphite_api/;
+        }
+
+        # Redirection vers Elasticsearch
+        
+        location /elasticsearch/ {
+            proxy_pass http://elasticsearch/;
         }
 
     	#error_page 404 /404.html;
