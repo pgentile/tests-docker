@@ -26,6 +26,10 @@ with open('/etc/nginx/nginx.conf.template') as input_f, open('/etc/nginx/nginx.c
 
 print "Lancement de nginx..."
 
+# Flusher tout ce qui est bufferisé avant d'écraser le process par nginx
+sys.stdout.flush()
+sys.stderr.flush()
+
 binary = "/usr/sbin/nginx"
 args = [binary] + sys.argv[1:]
 os.execv(binary, args)
