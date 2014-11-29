@@ -1,18 +1,3 @@
-#!/bin/bash -e
-
-error() {
-    echo "Erreur : $*" >&2
-    exit 1
-}
-
-
-# Configurer Grafana
-
-[[ -n "$GRAPHITE_PORT_8080_TCP_ADDR" ]] || error "Variable GRAPHITE_PORT_8080_TCP_ADDR non definie"
-[[ -n "$GRAPHITE_PORT_8080_TCP_PORT" ]] || error "Variable GRAPHITE_PORT_8080_TCP_PORT non definie"
-
-
-cat >/usr/share/grafana/config.js <<EOF
 define(['settings'],
 function (Settings) {
   
@@ -31,7 +16,7 @@ function (Settings) {
     datasources: {
       graphite: {
         type: 'graphite',
-        url: "http://${GRAPHITE_PORT_8080_TCP_ADDR}:${GRAPHITE_PORT_8080_TCP_PORT}",
+        url: "http://" + location.hostname + "/graphite" ,
       },
       /*
       elasticsearch: {
@@ -82,9 +67,3 @@ function (Settings) {
 
   });
 });
-EOF
-
-
-# Lancer le serveur Nginx
-
-exec nginx

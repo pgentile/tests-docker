@@ -30,9 +30,11 @@ http {
 	# Logging Settings
 	##
 
-	access_log /var/log/nginx/access.log;
-	error_log /var/log/nginx/error.log;
-
+	# access_log /var/log/nginx/access.log;
+    access_log /dev/stdout;
+	# error_log /var/log/nginx/error.log;
+    error_log /dev/stdout;
+    
 	##
 	# Gzip Settings
 	##
@@ -47,6 +49,10 @@ http {
 	# gzip_http_version 1.1;
 	# gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
     
+    upstream graphite_api {
+        server $graphite_host:$graphite_port;
+    }
+    
     server {
     	listen   8080; ## listen for ipv4;
     	#listen   [::]:80 default_server ipv6only=on; ## listen for ipv6
@@ -60,8 +66,14 @@ http {
     	location / {
     		# First attempt to serve request as file, then
     		# as directory, then fall back to displaying a 404.
-    		try_files $uri $uri/ =404;
+    		try_files $$uri $$uri/ =404;
     	}
+        
+        # Redirection vers Graphite API
+        
+        location /graphite/ {
+            proxy_pass http://graphite_api/;
+        }
 
     	#error_page 404 /404.html;
 
