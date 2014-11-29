@@ -10,6 +10,6 @@ RUN echo "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable 
 
 ADD ./conf /usr/share/elasticsearch/config
 
-EXPOSE 9200
+EXPOSE 9200 9300 54328/udp
 
 ENTRYPOINT ["/usr/share/elasticsearch/bin/elasticsearch"]
