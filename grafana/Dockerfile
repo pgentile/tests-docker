@@ -15,6 +15,7 @@ RUN mkdir /tmp/grafana \
 RUN rm -fr /etc/nginx/conf.d /etc/nginx/sites-avalaible /etc/nginx/sites-enabled
 ADD ./conf/nginx.conf.template /etc/nginx/
 ADD ./conf/config.js /usr/share/grafana/
+ADD ./conf/more-mime.types /etc/nginx/
 
 # Script de lancement
 ADD ./entrypoint.py /usr/bin/entrypoint.py
