@@ -8,9 +8,13 @@ grafana:
 
 graphite:
   image: pgentile/graphite-api
+  volumes:
+    - "./runtime/whisper:/var/lib/whisper"
 
 elasticsearch:
   image: pgentile/elasticsearch
   command: --cluster.name=grafana --node.name=grafana --index.number_of_replicas=0
   ports:
     - "9200:9200"
+  volumes:
+    - "./runtime/elasticsearch:/var/lib/elasticsearch"
