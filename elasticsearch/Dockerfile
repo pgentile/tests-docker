@@ -9,11 +9,17 @@ RUN echo "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable 
     && apt-get -y update \
     && apt-get -y install elasticsearch
 
-ADD ./conf /usr/share/elasticsearch/config
-
 # Plugin pour avoir une UI
 RUN /usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head
 
+RUN mkdir -p /tmp/elasticsearch
+
+ADD ./conf /etc/elasticsearch
+
+ADD ./entrypoint.sh /usr/bin/
+
 EXPOSE 9200 9300 54328/udp
 
-ENTRYPOINT ["/usr/share/elasticsearch/bin/elasticsearch"]
+VOLUME ["/var/log/elasticsearch", "/var/lib/elasticsearch"]
+
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
