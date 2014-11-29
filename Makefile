@@ -7,7 +7,7 @@ all:
 
 # Construction des images de base
 
-IMAGES=debian consul python-base python-wheel-onbuild graphite-api-builder grafana
+IMAGES=debian consul python-base python-wheel-onbuild graphite-api-builder grafana elasticsearch
 
 all: $(IMAGES)
 
@@ -21,6 +21,7 @@ python-base: debian
 python-wheel-onbuild: python-base
 graphite-api-builder: python-wheel-onbuild
 grafana: debian
+elasticsearch: debian
 
 # Dependances
 
