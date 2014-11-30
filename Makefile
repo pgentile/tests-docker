@@ -7,7 +7,7 @@ all:
 
 # Construction des images de base
 
-IMAGES=debian consul python-base python-wheel-onbuild graphite-api-builder grafana elasticsearch serf
+IMAGES=debian consul python-base python-wheel-onbuild graphite-api-builder grafana elasticsearch serf serf-handler-test
 
 all: $(IMAGES)
 
@@ -23,6 +23,7 @@ graphite-api-builder: python-wheel-onbuild
 grafana: debian
 elasticsearch: debian
 serf: debian
+serf-handler-test: serf
 
 # Dependances
 

@@ -1,0 +1,8 @@
+{
+  "event_handlers": [
+    "/usr/lib/serf/handle-event.sh"
+  ],
+  "tags": {
+    "type": "test"
+  }
+}
