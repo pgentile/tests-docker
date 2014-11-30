@@ -4,7 +4,7 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 # Pour installer Serf
 RUN apt-get install -y unzip ca-certificates wget
 
-ENV SERF_VERSION 0.4.1
+ENV SERF_VERSION 0.6.3
 
 # Installer Serf
 RUN mkdir /tmp/serf-install \
