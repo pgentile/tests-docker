@@ -53,10 +53,12 @@ http {
     
     upstream graphite_api {
         server $graphite_host:$graphite_port;
+        keepalive 16;
     }
     
     upstream elasticsearch {
         server $elasticsearch_host:$elasticsearch_port;
+        keepalive 16;
     }
     
     server {
@@ -79,12 +81,23 @@ http {
         
         location /graphite/ {
             proxy_pass http://graphite_api/;
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+            proxy_set_header Host $$host:$$proxy_port;
+            
+            proxy_redirect http://$$proxy_host:$$proxy_port/ /graphite/;
+            
         }
 
         # Redirection vers Elasticsearch
         
         location /elasticsearch/ {
             proxy_pass http://elasticsearch/;
+            proxy_http_version 1.1;
+            proxy_set_header Connection "";
+            proxy_set_header Host $$host:$$proxy_port;
+            
+            proxy_redirect http://$$proxy_host:$$proxy_port/ /elasticsearch/;
         }
 
     	#error_page 404 /404.html;
