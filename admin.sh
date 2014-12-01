@@ -13,6 +13,7 @@ Commandes:
     console CONTAINER   Lancer une console dans un container
     stopall             Arrêter tous les containers
     purgeall            Purger tout ce qui peut l'être
+    shell IMAGE         Lancer un shell dans une image
 EOF
 }
 
@@ -54,6 +55,12 @@ stop_all() {
 }
 
 
+open_shell() {
+    typeset image="$1"
+    exec docker run -i -t $image /bin/bash -l
+}
+
+
 case "$1" in
     purge)
         purge_containers
@@ -74,6 +81,9 @@ case "$1" in
     purgeall)
         purge_containers
         purge_images
+        ;;
+    shell)
+        open_shell $2
         ;;
     -h | --help | '')
         usage
