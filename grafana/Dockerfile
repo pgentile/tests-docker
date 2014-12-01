@@ -1,7 +1,7 @@
 FROM pgentile/debian
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get -q install -y ca-certificates wget tar python2.7-minimal nginx-light
+RUN apt-get install -y ca-certificates wget tar python2.7-minimal nginx-light
 
 ENV GRAFANA_VERSION 1.8.1
 

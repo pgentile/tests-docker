@@ -2,7 +2,7 @@ FROM pgentile/python-base
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Dépendances nécessaires à l'exécution de Graphite
-RUN apt-get -q install -y libcairo2 libffi5 libyaml-0-2
+RUN apt-get install -y libcairo2 libffi5 libyaml-0-2
 
 ADD ./wheels/ /tmp/wheels/
 
