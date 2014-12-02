@@ -11,10 +11,11 @@ RUN pip install -r /tmp/wheels/carbon/requirements.txt -r /tmp/wheels/graphite-a
 
 RUN mkdir -p /var/cache/graphite
 
-ADD ./conf/gunicorn.conf.py ./conf/graphite-api.yaml /etc/
+ADD ./conf/gunicorn.conf.py ./conf/graphite-api.yaml ./conf/supervisord.conf /etc/
+ADD ./conf/carbon.conf ./conf/storage-schemas.conf /etc/carbon/
 
-VOLUME ["/var/lib/whisper"]
+VOLUME ["/var/lib/whisper", "/var/log/supervisor", "/var/log/carbon"]
 
-EXPOSE 8080
+EXPOSE 8080 2003 2004 7002
 
-ENTRYPOINT ["gunicorn", "--config", "/etc/gunicorn.conf.py", "graphite_api.app:app"]
+ENTRYPOINT ["supervisord", "-c", "/etc/supervisord.conf"]
