@@ -7,7 +7,10 @@ all:
 
 # Construction des images de base
 
-IMAGES=debian consul python-base python-wheel-onbuild graphite-api-builder grafana elasticsearch serf serf-handler-test serf-aware-base
+IMAGES=
+IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
+IMAGES += grafana elasticsearch serf serf-handler-test serf-aware-base
+IMAGES += carbon-builder
 
 all: $(IMAGES)
 
@@ -25,12 +28,18 @@ elasticsearch: debian
 serf: debian
 serf-handler-test: serf
 serf-aware-base: python-base
+carbon-builder: python-wheel-onbuild
 
-# Dependances
 
-all: graphite-api
+# Sous Makefiles
 
-graphite-api: graphite-api-builder
+SUBMAKES=graphite-api
+
+all: $(SUBMAKES)
+
+$(SUBMAKES):
 	cd $@ && $(MAKE)
 	
-.PHONY: graphite-api
+.PHONY: $(SUBMAKES)
+
+graphite-api: graphite-api-builder
