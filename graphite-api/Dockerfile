@@ -6,7 +6,7 @@ RUN apt-get install -y libcairo2 libffi5 libyaml-0-2
 
 ADD ./wheels/ /tmp/wheels/
 
-RUN pip install -r /tmp/wheels/requirements.txt --find-links /tmp/wheels/ --no-index \
+RUN pip install -r /tmp/wheels/carbon/requirements.txt -r /tmp/wheels/graphite-api/requirements.txt --find-links /tmp/wheels/carbon --find-links /tmp/wheels/graphite-api --no-index \
     && rm -fr /tmp/wheels
 
 RUN mkdir -p /var/cache/graphite
