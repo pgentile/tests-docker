@@ -10,7 +10,7 @@ all:
 IMAGES=
 IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
 IMAGES += grafana elasticsearch serf serf-handler-test serf-aware-base
-IMAGES += carbon-builder
+IMAGES += carbon-builder puppet-masterless
 
 all: $(IMAGES)
 
@@ -29,6 +29,7 @@ serf: debian
 serf-handler-test: serf
 serf-aware-base: python-base
 carbon-builder: python-wheel-onbuild
+puppet-masterless: debian
 
 
 # Sous Makefiles
