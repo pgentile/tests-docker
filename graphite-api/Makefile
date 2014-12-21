@@ -1,5 +1,9 @@
 all: graphite-api
 
+clean:
+	rm -fr wheels/
+	-docker rmi pgentile/graphite-api
+
 # Construction des images
 
 graphite-api: wheels/graphite-api/requirements.txt wheels/carbon/requirements.txt
@@ -18,4 +22,4 @@ wheels/carbon/requirements.txt: | wheels/carbon
 
 # Phony
 
-.PHONY: all graphite-api
+.PHONY: all graphite-api clean

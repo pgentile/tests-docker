@@ -2,7 +2,9 @@
 
 all:
 
-.PHONY: all
+clean:
+
+.PHONY: all clean
 
 
 # Construction des images de base
@@ -12,12 +14,18 @@ IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
 IMAGES += grafana elasticsearch serf serf-handler-test serf-aware-base
 IMAGES += carbon-builder puppet-masterless
 
+CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
+
 all: $(IMAGES)
+clean: $(CLEAN_IMAGES)
 
 $(IMAGES):
 	docker build -t pgentile/$@ $@
 
-.PHONY: $(IMAGES)
+$(CLEAN_IMAGES):
+	-docker rmi pgentile/$$(echo $@ | sed 's/^clean-//')
+
+.PHONY: $(IMAGES) $(CLEAN_IMAGES)
 
 consul: debian
 python-base: debian
@@ -36,11 +44,17 @@ puppet-masterless: debian
 
 SUBMAKES=graphite-api
 
+CLEAN_SUBMAKES=$(addprefix clean-,$(SUBMAKES))
+
 all: $(SUBMAKES)
+clean: $(CLEAN_SUBMAKES)
 
 $(SUBMAKES):
 	cd $@ && $(MAKE)
-	
-.PHONY: $(SUBMAKES)
+
+$(CLEAN_SUBMAKES):
+	name=$$(echo $@ | sed 's/^clean-//') && cd $$name && $(MAKE) clean
+
+.PHONY: $(SUBMAKES) $(CLEAN_SUBMAKES)
 
 graphite-api: graphite-api-builder
