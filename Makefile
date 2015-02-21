@@ -12,7 +12,7 @@ clean:
 IMAGES=
 IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
 IMAGES += grafana elasticsearch serf serf-handler-test serf-aware-base
-IMAGES += carbon-builder puppet-masterless
+IMAGES += carbon-builder puppet-masterless zookeeper
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -38,7 +38,8 @@ serf-handler-test: serf
 serf-aware-base: python-base
 carbon-builder: python-wheel-onbuild
 puppet-masterless: debian
-
+zookeeper: debian
+graphite-api: graphite-api-builder
 
 # Sous Makefiles
 

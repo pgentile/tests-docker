@@ -3,7 +3,7 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 RUN apt-get install -y ca-certificates wget tar python2.7-minimal nginx-light
 
-ENV GRAFANA_VERSION 1.8.1
+ENV GRAFANA_VERSION 1.9.1
 
 RUN mkdir /tmp/grafana \
     && cd /tmp/grafana \
