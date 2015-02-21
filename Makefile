@@ -11,8 +11,8 @@ clean:
 
 IMAGES=
 IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
-IMAGES += grafana elasticsearch serf serf-handler-test serf-aware-base
-IMAGES += carbon-builder puppet-masterless zookeeper
+IMAGES += grafana elasticsearch
+IMAGES += carbon-builder zookeeper
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -33,11 +33,7 @@ python-wheel-onbuild: python-base
 graphite-api-builder: python-wheel-onbuild
 grafana: debian
 elasticsearch: debian
-serf: debian
-serf-handler-test: serf
-serf-aware-base: python-base
 carbon-builder: python-wheel-onbuild
-puppet-masterless: debian
 zookeeper: debian
 graphite-api: graphite-api-builder
 
