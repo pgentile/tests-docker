@@ -13,6 +13,7 @@ IMAGES=
 IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
 IMAGES += grafana elasticsearch
 IMAGES += carbon-builder zookeeper
+IMAGES += redmine
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
