@@ -1,20 +1,17 @@
 FROM pgentile/debian
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get install -y ca-certificates wget
-
-RUN apt-get install -y postgresql ruby1.9.3
-RUN apt-get install -y git
+RUN apt-get install -y ca-certificates wget \
+    postgresql ruby1.9.3 git \
+    make zlib1g-dev libxml2-dev libpq-dev pkg-config \
+    imagemagick libmagickcore-dev libmagickwand-dev
 
 RUN gem install bundler
 
 RUN mkdir /usr/share/redmine \
     && cd /usr/share/redmine \
     && git clone https://github.com/redmine/redmine.git . \
-    && git checkout 3.0.0
-
-RUN apt-get install -y make zlib1g-dev libxml2-dev libpq-dev pkg-config \
-    imagemagick libmagickcore-dev libmagickwand-dev
+    && git checkout 3.0.1
 
 # Avant, nécessaire pour l'installation de Redmine via bundle
 ADD database.yml /usr/share/redmine/config/
