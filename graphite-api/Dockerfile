@@ -2,7 +2,7 @@ FROM pgentile/python-base
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Dépendances nécessaires à l'exécution de Graphite
-RUN apt-get install -y libcairo2 libffi5 libyaml-0-2
+RUN apt-get install -y libcairo2 libffi5 libyaml-0-2 nginx-light
 
 ADD ./wheels/ /tmp/wheels/
 
@@ -13,6 +13,9 @@ RUN mkdir -p /var/cache/graphite
 
 ADD ./conf/gunicorn.conf.py ./conf/graphite-api.yaml ./conf/supervisord.conf /etc/
 ADD ./conf/carbon.conf ./conf/storage-schemas.conf /etc/carbon/
+
+RUN rm -fr /etc/nginx/conf.d /etc/nginx/sites-avalaible /etc/nginx/sites-enabled
+ADD ./conf/nginx.conf /etc/nginx/
 
 VOLUME ["/var/lib/whisper", "/var/log/supervisor", "/var/log/carbon"]
 

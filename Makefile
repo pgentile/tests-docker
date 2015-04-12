@@ -11,7 +11,7 @@ clean:
 
 IMAGES=
 IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
-IMAGES += grafana elasticsearch
+IMAGES += grafana elasticsearch grafana2
 IMAGES += carbon-builder zookeeper
 IMAGES += redmine
 
@@ -33,6 +33,7 @@ python-base: debian
 python-wheel-onbuild: python-base
 graphite-api-builder: python-wheel-onbuild
 grafana: debian
+grafana2: debian
 elasticsearch: debian
 carbon-builder: python-wheel-onbuild
 zookeeper: debian

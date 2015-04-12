@@ -1,28 +1,9 @@
 grafana:
-  image: pgentile/grafana
-  links:
-    - graphite
-    - "elasticsearchclient:elasticsearch"
+  image: pgentile/grafana2
   ports:
-    - "80:8080"
+    - "8080:8080"
 
 graphite:
   image: pgentile/graphite-api
-#   volumes:
-#     - "./runtime/whisper:/var/lib/whisper"
-
-# Client qui assure le rôle de load balancer entre les noeuds Elasticsearch
-elasticsearchclient:
-  image: pgentile/elasticsearch
-  command: --cluster.name=grafana --node.data=false --node.master=false
   ports:
-    - "9200:9200"
-
-elasticsearch:
-  image: pgentile/elasticsearch
-  command: --cluster.name=grafana --http.enabled=false --index.number_of_replicas=1 --index.number_of_shards=1
-#   volumes:
-#     - "./runtime/elasticsearch:/var/lib/elasticsearch"
-
-# serfbase:
-#   image: pgentile/serf
+    - "8081:8080"
