@@ -6,5 +6,3 @@ $(boot2docker shellinit)
 # avec la vérification SSL des hostnames par fig
 boot2docker_ip=$(boot2docker ip)
 export DOCKER_HOST=$(echo "$DOCKER_HOST" | sed "s|tcp://$boot2docker_ip|tcp://boot2docker|")
-
-. venv/bin/activate
