@@ -2,7 +2,7 @@ FROM pgentile/debian
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 RUN apt-get install -y ca-certificates wget \
-    postgresql ruby1.9.3 git \
+    postgresql ruby ruby-dev git \
     make zlib1g-dev libxml2-dev libpq-dev pkg-config \
     imagemagick libmagickcore-dev libmagickwand-dev
 
