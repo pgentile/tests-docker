@@ -14,6 +14,7 @@ IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
 IMAGES += grafana elasticsearch grafana2
 IMAGES += carbon-builder zookeeper
 IMAGES += redmine
+IMAGES += consuldns
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -38,6 +39,7 @@ elasticsearch: debian
 carbon-builder: python-wheel-onbuild
 zookeeper: debian
 graphite-api: graphite-api-builder
+consuldns: consul
 
 # Sous Makefiles
 

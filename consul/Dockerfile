@@ -4,7 +4,7 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 # Pour installer Consul
 RUN apt-get install -y python2.7-minimal unzip curl
 
-ENV CONSUL_VERSION 0.4.1
+ENV CONSUL_VERSION 0.5.2
 
 # Installer le binaire Consul
 RUN curl -L -o /tmp/consul.zip https://dl.bintray.com/mitchellh/consul/${CONSUL_VERSION}_linux_amd64.zip \
