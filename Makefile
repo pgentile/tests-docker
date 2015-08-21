@@ -16,6 +16,7 @@ IMAGES += carbon-builder zookeeper
 IMAGES += redmine
 IMAGES += consuldns
 IMAGES += fpm
+IMAGES += netcat
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -41,6 +42,7 @@ zookeeper: debian
 graphite-api: graphite-api-builder
 consuldns: consul
 fpm: debian
+netcat: debian
 
 
 # Sous Makefiles
