@@ -1,6 +1,7 @@
-#!/bin/bash -e
+#!/bin/bash
 # Gestion des containers Docker
 
+set -e
 
 usage() {
     cat <<-EOF
@@ -9,7 +10,7 @@ Usage: admin.sh COMMANDE
 Commandes:
     purge               Purger les containers arrêtés
     ipurge              Purger les images sans repository
-    ip CONTAINER...     Adresse
+    ip [CONTAINER...]   Adresse
     console CONTAINER   Lancer une console dans un container
     stopall             Arrêter tous les containers
     purgeall            Purger tout ce qui peut l'être
@@ -18,46 +19,50 @@ EOF
 }
 
 
+error() {
+    echo "Error: $*" >&2
+    return 1
+}
+
+
 purge_containers() {
-    (docker ps -q; docker ps -qa) | sort | uniq -u | while read container
-    do
-        docker rm $container
-    done
+    typeset containers=$(docker ps -a --filter 'exited != null' -q --no-trunc)
+    [[ -z "$containers" ]] || docker rm $containers
 }
 
 
 purge_images() {
-    # Ligne 1 : en-têtes. Colonne 1 : repo, colonne 3 : ID image
-    docker images --no-trunc | awk 'NR > 1 && $1 == "<none>" { print $3 }' | while read image
-    do
-        docker rmi $image
-    done
+    typeset images=$(docker images --filter "dangling=true" -q --no-trunc)
+    [[ -z "$images" ]] || docker rmi $images
 }
 
 
 container_ip() {
     typeset containers="$*"
-    docker inspect -f '{{ .NetworkSettings.IPAddress }}' $containers
+    if [[ -z "$containers" ]]; then
+        containers=$(docker ps -q --no-trunc)
+        [[ -n "$containers" ]] || error "no started container found"
+    fi
+
+    docker inspect -f '{{ .Id }} {{ .NetworkSettings.IPAddress }}' $containers | awk '{ print substr($1, 0, 12) "   " $2 }'
 }
 
 
 console() {
     typeset container="$1"
-    exec docker exec -i -t $container /bin/bash -l
+    exec docker exec -i -t $container bash -l
 }
 
 
 stop_all() {
-    docker ps -q | while read container
-    do
-        docker stop $container
-    done
+    typeset containers=$(docker ps -q --no-trunc)
+    [[ -z "$containers" ]] || docker stop $containers
 }
 
 
 open_shell() {
     typeset image="$1"
-    exec docker run -i -t $image /bin/bash -l
+    exec docker run -i -t $image bash -l
 }
 
 
@@ -89,7 +94,7 @@ case "$1" in
         usage
         ;;
     *)
-        echo "Erreur: commande inconnue" >&2
+        error "Unknown command"
         exit 1
         ;;
 esac
