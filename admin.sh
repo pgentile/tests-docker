@@ -15,6 +15,7 @@ Commandes:
     stopall             Arrêter tous les containers
     purgeall            Purger tout ce qui peut l'être
     shell IMAGE         Lancer un shell dans une image
+    hello               Lancer le Hello World
 EOF
 }
 
@@ -44,7 +45,9 @@ container_ip() {
         [[ -n "$containers" ]] || error "no started container found"
     fi
 
-    docker inspect -f '{{ .Id }} {{ .NetworkSettings.IPAddress }}' $containers | awk '{ print substr($1, 0, 12) "   " $2 }'
+    typeset template='{{ .Name }} ({{ .Config.Image }}): {{ .NetworkSettings.IPAddress }}'
+
+    docker inspect -f "$template" $containers | sed -e 's@^/@@'
 }
 
 
@@ -63,6 +66,11 @@ stop_all() {
 open_shell() {
     typeset image="$1"
     exec docker run -i -t $image bash -l
+}
+
+
+hello() {
+    docker run hello-world
 }
 
 
@@ -89,6 +97,9 @@ case "$1" in
         ;;
     shell)
         open_shell $2
+        ;;
+    hello)
+        hello
         ;;
     -h | --help | '')
         usage
