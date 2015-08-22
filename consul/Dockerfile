@@ -34,5 +34,6 @@ VOLUME /var/consul
 # Voir les ports sur https://consul.io/docs/agent/options.html
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
 
-# Démarrer Consul en tant qu'agent
+# Démarrer Consul en tant qu'agent stadalone
 ENTRYPOINT ["/usr/bin/entrypoint.py"]
+CMD ["-server", "-bootstrap-expect=1"]
