@@ -6,8 +6,7 @@ RUN apt-get install -y libcairo2 libffi6 libyaml-0-2 nginx-light
 
 ADD ./wheels/ /tmp/wheels/
 
-RUN pip install -r /tmp/wheels/carbon/requirements.txt -r /tmp/wheels/graphite-api/requirements.txt --find-links /tmp/wheels/carbon --find-links /tmp/wheels/graphite-api --no-index \
-    && rm -fr /tmp/wheels
+RUN pip install --find-links /tmp/wheels --no-index carbon graphite_api gunicorn gevent supervisor
 
 RUN mkdir -p /var/cache/graphite
 

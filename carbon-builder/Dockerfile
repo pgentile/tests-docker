@@ -3,10 +3,12 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 ADD fix_setup.patch /tmp/
 
+ENV CARBON_VERSION=0.9.12
+
 RUN cd /tmp \
     && git clone https://github.com/graphite-project/carbon.git \
     && cd carbon \
-    && git checkout 0.9.12 \
+    && git checkout $CARBON_VERSION \
     && git apply /tmp/fix_setup.patch
 
 ADD build-carbon.sh /usr/bin/

@@ -35,11 +35,11 @@ consul: debian
 python-base: debian
 python-wheel-onbuild: python-base
 graphite-api-builder: python-wheel-onbuild
+carbon-builder: python-wheel-onbuild
+graphite-api: graphite-api-builder carbon-builder
 grafana2: debian
 elasticsearch: debian
-carbon-builder: python-wheel-onbuild
 zookeeper: debian
-graphite-api: graphite-api-builder
 consuldns: consul
 fpm: debian
 netcat: debian

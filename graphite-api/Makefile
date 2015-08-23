@@ -1,24 +1,21 @@
 all: graphite-api
 
 clean:
-	rm -fr wheels/
+	-rm -fr wheels/
 	-docker rmi pgentile/graphite-api
 
 # Construction des images
 
-graphite-api: wheels/graphite-api/requirements.txt wheels/carbon/requirements.txt
-	docker build -t pgentile/$@ .
+graphite-api: | wheels
+	# ./build-wheels.sh carbon-builder pgentile/carbon-builder
+	# ./build-wheels.sh graphite-api-builder pgentile/graphite-api-builder
+	# ./build-wheels.sh graphite-api-extras-builder pgentile/python-wheel-onbuild supervisor gevent gunicorn
+	docker build -t pgentile/graphite-api .
 
 # Wheels
 
-wheels/graphite-api wheels/carbon:
+wheels:
 	mkdir -p $@
-
-wheels/graphite-api/requirements.txt: | wheels/graphite-api
-	docker run --rm -v ${PWD}/wheels/graphite-api:/var/local/wheels pgentile/graphite-api-builder graphite-api gunicorn gevent supervisor
-
-wheels/carbon/requirements.txt: | wheels/carbon
-	docker run --rm -v ${PWD}/wheels/carbon:/var/local/wheels pgentile/carbon-builder
 
 # Phony
 
