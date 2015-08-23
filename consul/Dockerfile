@@ -2,7 +2,7 @@ FROM pgentile/debian
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Pour installer Consul
-RUN apt-get install -y python2.7-minimal unzip curl
+RUN apt-get install -y unzip curl
 
 ENV CONSUL_VERSION 0.5.2
 
@@ -22,18 +22,15 @@ RUN curl -L -o /tmp/ui.zip https://dl.bintray.com/mitchellh/consul/${CONSUL_VERS
 # Config de base
 COPY ./conf/consul.json /etc/consul.d/
 
-# Users
-RUN groupadd -r consul && useradd -r -g consul -M consul
-
-# Script de lancement
-ADD ./entrypoint.py /usr/bin/entrypoint.py
+# Création du répertoire pour les données de l'agent
+RUN mkdir -p /var/run/consul
 
 # Données générées par l'agent
-VOLUME /var/consul
+VOLUME /var/run/consul
 
 # Voir les ports sur https://consul.io/docs/agent/options.html
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
 
 # Démarrer Consul en tant qu'agent stadalone
-ENTRYPOINT ["/usr/bin/entrypoint.py"]
+ENTRYPOINT ["consul", "agent", "-config-dir", "/etc/consul.d"]
 CMD ["-server", "-bootstrap-expect=1"]
