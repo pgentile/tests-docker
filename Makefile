@@ -17,6 +17,7 @@ IMAGES += redmine
 IMAGES += consuldns
 IMAGES += fpm
 IMAGES += netcat
+IMAGES += net-tools
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -42,8 +43,7 @@ elasticsearch: debian
 zookeeper: debian
 consuldns: consul
 fpm: debian
-netcat: debian
-
+net-tools: debian
 
 # Sous Makefiles
 
