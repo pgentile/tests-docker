@@ -16,6 +16,7 @@ Commandes:
     purgeall            Purger tout ce qui peut l'être
     shell IMAGE         Lancer un shell dans une image
     hello               Lancer le Hello World
+    machineip           IP de la machine courante
 EOF
 }
 
@@ -27,14 +28,18 @@ error() {
 
 
 purge_containers() {
-    typeset containers=$(docker ps -a --filter 'exited != null' -q --no-trunc)
-    [[ -z "$containers" ]] || docker rm $containers
+    typeset container
+    docker ps -a --filter 'exited != null' -q --no-trunc | while read container; do
+        docker rm $container || true
+    done
 }
 
 
 purge_images() {
-    typeset images=$(docker images --filter "dangling=true" -q --no-trunc)
-    [[ -z "$images" ]] || docker rmi $images
+    typeset image
+    docker images --filter "dangling=true" -q --no-trunc | while read image; do
+        docker rmi $image || true
+    done
 }
 
 
@@ -74,6 +79,12 @@ hello() {
 }
 
 
+machine_ip() {
+    [[ -n "$DOCKER_MACHINE_NAME" ]] || error "DOCKER_MACHINE_NAME has no value, can't determine machine name"
+    docker-machine ip $DOCKER_MACHINE_NAME
+}
+
+
 case "$1" in
     purge)
         purge_containers
@@ -100,6 +111,9 @@ case "$1" in
         ;;
     hello)
         hello
+        ;;
+    machineip)
+        machine_ip
         ;;
     -h | --help | '')
         usage
