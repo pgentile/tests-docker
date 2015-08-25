@@ -70,7 +70,7 @@ stop_all() {
 
 open_shell() {
     typeset image="$1"
-    exec docker run -i -t $image bash -l
+    exec docker run -i -t --entrypoint='bash' $image -l
 }
 
 
@@ -82,6 +82,12 @@ hello() {
 machine_ip() {
     [[ -n "$DOCKER_MACHINE_NAME" ]] || error "DOCKER_MACHINE_NAME has no value, can't determine machine name"
     docker-machine ip $DOCKER_MACHINE_NAME
+}
+
+
+machine_halt() {
+    [[ -n "$DOCKER_MACHINE_NAME" ]] || error "DOCKER_MACHINE_NAME has no value, can't determine machine name"
+    docker-machine stop $DOCKER_MACHINE_NAME
 }
 
 
@@ -114,6 +120,9 @@ case "$1" in
         ;;
     machineip)
         machine_ip
+        ;;
+    machinehalt)
+        machine_halt
         ;;
     -h | --help | '')
         usage
