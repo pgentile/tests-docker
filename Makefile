@@ -18,6 +18,7 @@ IMAGES += consuldns
 IMAGES += fpm
 IMAGES += netcat
 IMAGES += net-tools
+IMAGES += fpm-consul
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -44,6 +45,7 @@ zookeeper: debian
 consuldns: consul
 fpm: debian
 net-tools: debian
+fpm-consul: fpm
 
 # Sous Makefiles
 
