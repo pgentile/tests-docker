@@ -14,4 +14,9 @@ RUN apt-get install -y unzip
 RUN unzip consul.zip
 RUN unzip consul-ui.zip
 
-CMD ['-s', 'dir', '-t', 'deb', '--name', 'consul', '--version', '0.5.2', 'consul=/usr/bin/']
+ADD config /var/fpm/workdir/config
+ADD scripts /var/fpm/workdir/scripts
+ADD entrypoint.sh /var/fpm/workdir/entrypoint.sh
+
+ENTRYPOINT ['/var/fpm/workdir/entrypoint.sh']
+CMD []
