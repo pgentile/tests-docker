@@ -19,6 +19,7 @@ IMAGES += fpm
 IMAGES += netcat
 IMAGES += net-tools
 IMAGES += fpm-consul
+IMAGES += elasticsearch-stream2es
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -46,6 +47,7 @@ consuldns: consul
 fpm: debian
 net-tools: debian
 fpm-consul: fpm
+elasticsearch-stream2es: debian
 
 # Sous Makefiles
 
