@@ -11,7 +11,7 @@ RUN gem install bundler
 RUN mkdir /usr/share/redmine \
     && cd /usr/share/redmine \
     && git clone https://github.com/redmine/redmine.git . \
-    && git checkout 3.0.1
+    && git checkout 3.1.1
 
 # Avant, nécessaire pour l'installation de Redmine via bundle
 ADD database.yml /usr/share/redmine/config/
