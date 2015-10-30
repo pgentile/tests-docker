@@ -18,7 +18,6 @@ IMAGES += consuldns
 IMAGES += fpm
 IMAGES += netcat
 IMAGES += net-tools
-IMAGES += fpm-consul
 IMAGES += elasticsearch-stream2es
 IMAGES += jenkins
 
@@ -47,12 +46,14 @@ zookeeper: debian
 consuldns: consul
 fpm: debian
 net-tools: debian
-fpm-consul: fpm
 elasticsearch-stream2es: debian
+
 
 # Sous Makefiles
 
-SUBMAKES=graphite-api
+SUBMAKES=
+SUBMAKES += graphite-api
+SUBMAKES += fpm-consul
 
 CLEAN_SUBMAKES=$(addprefix clean-,$(SUBMAKES))
 
@@ -68,3 +69,4 @@ $(CLEAN_SUBMAKES):
 .PHONY: $(SUBMAKES) $(CLEAN_SUBMAKES)
 
 graphite-api: graphite-api-builder
+fpm-consul: fpm

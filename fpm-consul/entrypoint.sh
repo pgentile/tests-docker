@@ -15,4 +15,4 @@ exec fpm \
     --after-install scripts/after-install.sh \
     consul=/usr/bin/ \
     config/systemd/consul.service=/lib/systemd/system/ \
-    config/consul/logging.json=/etc/consul.d/
+    config/consul/=/etc/consul.d/
