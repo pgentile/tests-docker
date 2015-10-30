@@ -17,6 +17,7 @@ Commandes:
     shell IMAGE         Lancer un shell dans une image
     hello               Lancer le Hello World
     machineip           IP de la machine courante
+    stats               Statistiques sur les containers actifs
 EOF
 }
 
@@ -29,7 +30,7 @@ error() {
 
 purge_containers() {
     typeset container
-    docker ps -a --filter 'exited != null' -q --no-trunc | while read container; do
+    docker ps -a --filter 'status=exited' -q --no-trunc | while read container; do
         docker rm $container || true
     done
 }
@@ -91,6 +92,11 @@ machine_halt() {
 }
 
 
+stats() {
+    docker stats $(docker inspect -f "{{ .Name }}" $(docker ps -q))
+}
+
+
 case "$1" in
     purge)
         purge_containers
@@ -124,11 +130,14 @@ case "$1" in
     machinehalt)
         machine_halt
         ;;
+    stats)
+        stats
+        ;;
     -h | --help | '')
         usage
         ;;
     *)
-        error "Unknown command"
+        error "Unknown command" || true
         exit 1
         ;;
 esac
