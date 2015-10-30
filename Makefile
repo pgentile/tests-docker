@@ -20,6 +20,7 @@ IMAGES += netcat
 IMAGES += net-tools
 IMAGES += elasticsearch-stream2es
 IMAGES += jenkins
+IMAGES += build-essentials
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 
@@ -36,7 +37,7 @@ $(CLEAN_IMAGES):
 
 consul: debian
 python-base: debian
-python-wheel-onbuild: python-base
+python-wheel-onbuild: build-essentials
 graphite-api-builder: python-wheel-onbuild
 carbon-builder: python-wheel-onbuild
 graphite-api: graphite-api-builder carbon-builder
@@ -44,9 +45,10 @@ grafana2: debian
 elasticsearch: debian
 zookeeper: debian
 consuldns: consul
-fpm: debian
+fpm: build-essentials
 net-tools: debian
 elasticsearch-stream2es: debian
+build-essentials: debian
 
 
 # Sous Makefiles
@@ -61,10 +63,10 @@ all: $(SUBMAKES)
 clean: $(CLEAN_SUBMAKES)
 
 $(SUBMAKES):
-	cd $@ && $(MAKE)
+	$(MAKE) -C $@
 
 $(CLEAN_SUBMAKES):
-	name=$$(echo $@ | sed 's/^clean-//') && cd $$name && $(MAKE) clean
+	name=$$(echo $@ | sed 's/^clean-//') && $(MAKE) -C $$name clean
 
 .PHONY: $(SUBMAKES) $(CLEAN_SUBMAKES)
 

@@ -1,8 +1,8 @@
-FROM pgentile/python-base
+FROM pgentile/build-essentials
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-# Dépendances nécessaires pour construire des packages Python
-RUN apt-get install -y python2.7-dev build-essential git subversion
+RUN apt-get install -y ca-certificates python2.7 python-pip
+RUN pip install -U setuptools wheel
 
 ADD build-wheels.sh /usr/bin/
 
