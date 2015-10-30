@@ -31,6 +31,6 @@ VOLUME /var/run/consul
 # Voir les ports sur https://consul.io/docs/agent/options.html
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
 
-# Démarrer Consul en tant qu'agent stadalone
+# Démarrer Consul en tant qu'agent standalone
 ENTRYPOINT ["consul", "agent", "-config-dir", "/etc/consul.d"]
 CMD ["-server", "-bootstrap-expect=1"]
