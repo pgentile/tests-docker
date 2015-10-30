@@ -20,6 +20,7 @@ IMAGES += netcat
 IMAGES += net-tools
 IMAGES += fpm-consul
 IMAGES += elasticsearch-stream2es
+IMAGES += jenkins
 
 CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
 

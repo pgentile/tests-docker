@@ -1,0 +1,9 @@
+git:2.4.0
+git-client:1.18.0
+scm-api:0.2
+ssh-credentials:1.11
+credentials:1.21
+build-pipeline-plugin:1.4.8
+parameterized-trigger:2.17
+jquery:1.7.2-1
+dashboard-view:2.2
