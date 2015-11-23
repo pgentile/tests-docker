@@ -3,6 +3,7 @@
 
 set -e
 
+
 usage() {
     cat <<-EOF
 Usage: admin.sh COMMANDE
@@ -14,6 +15,7 @@ Commandes:
     console CONTAINER   Lancer une console dans un container
     stopall             Arrêter tous les containers
     purgeall            Purger tout ce qui peut l'être
+    purgevolumes        Purger les volumes
     shell IMAGE         Lancer un shell dans une image
     hello               Lancer le Hello World
     machineip           IP de la machine courante
@@ -41,6 +43,17 @@ purge_images() {
     docker images --filter "dangling=true" -q --no-trunc | while read image; do
         docker rmi $image || true
     done
+}
+
+
+purge_volumes() {
+    typeset count=$(docker ps -aq | wc -l | awk '{ print $0 }')
+    if [[ "$count" -eq 0 ]]; then
+        docker volume ls -q | xargs -n 1 docker volume rm
+    else
+        error "$count active container(s) found, can't purge all volumes"
+        return 1
+    fi
 }
 
 
@@ -117,6 +130,9 @@ case "$1" in
     purgeall)
         purge_containers
         purge_images
+        ;;
+    purgevolumes)
+        purge_volumes
         ;;
     shell)
         open_shell $2
