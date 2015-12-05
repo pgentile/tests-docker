@@ -7,10 +7,10 @@ clean:
 # Construction des images
 
 graphite-api: | wheels
-	./build-wheels.sh carbon-builder pgentile/carbon-builder
+	#./build-wheels.sh carbon-builder pgentile/carbon-builder
 	#./build-wheels.sh graphite-api-builder pgentile/graphite-api-builder
 	#./build-wheels.sh graphite-api-extras-builder pgentile/python-wheel-onbuild supervisor gevent gunicorn
-	#docker build -t pgentile/graphite-api .
+	docker build -t pgentile/graphite-api .
 
 # Wheels
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 CONTAINER_NAME="$1"
 IMAGE="$2"

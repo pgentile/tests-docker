@@ -1,2 +1,2 @@
-git+https://github.com/graphite-project/carbon.git@0.9.15#egg=carbon
-# carbon == 0.9.15
+whisper == 0.9.15
+file:///tmp/git/carbon#egg=carbon

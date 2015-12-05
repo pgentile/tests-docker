@@ -22,19 +22,6 @@ IMAGES += elasticsearch-stream2es
 IMAGES += jenkins
 IMAGES += build-essentials
 
-CLEAN_IMAGES=$(addprefix clean-,$(IMAGES))
-
-all: $(IMAGES)
-clean: $(CLEAN_IMAGES)
-
-$(IMAGES):
-	docker build -t pgentile/$@ $@
-
-$(CLEAN_IMAGES):
-	-docker rmi pgentile/$$(echo $@ | sed 's/^clean-//')
-
-.PHONY: $(IMAGES) $(CLEAN_IMAGES)
-
 consul: debian
 python-base: debian
 python-wheel-onbuild: build-essentials
@@ -73,3 +60,7 @@ $(CLEAN_SUBMAKES):
 #graphite-api: graphite-api-builder
 graphite-api: carbon-builder
 fpm-consul: fpm
+
+
+# Includes
+include docker.mk
