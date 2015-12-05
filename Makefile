@@ -10,7 +10,7 @@ clean:
 # Construction des images de base
 
 IMAGES=
-IMAGES += debian consul python-base python-wheel-onbuild graphite-api-builder
+IMAGES += debian consul python-base python-wheel-onbuild
 IMAGES += elasticsearch grafana2
 IMAGES += carbon-builder zookeeper
 IMAGES += redmine
@@ -25,9 +25,6 @@ IMAGES += build-essentials
 consul: debian
 python-base: debian
 python-wheel-onbuild: build-essentials
-graphite-api-builder: python-wheel-onbuild
-carbon-builder: python-wheel-onbuild
-graphite-api: graphite-api-builder carbon-builder
 grafana2: debian
 elasticsearch: debian
 zookeeper: debian
@@ -43,9 +40,9 @@ build-essentials: debian
 SUBMAKES=
 SUBMAKES += graphite-api
 SUBMAKES += fpm-consul
+SUBMAKES += graphite
 
-#graphite-api: graphite-api-builder
-graphite-api: carbon-builder
+graphite: python-wheel-onbuild python-base
 fpm-consul: fpm
 
 
