@@ -1,0 +1,2 @@
+git+https://github.com/graphite-project/carbon.git@0.9.15#egg=carbon
+# carbon == 0.9.15

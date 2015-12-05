@@ -1,0 +1,20 @@
+node1:
+    container_name: mongo-rs-node1
+    image: "mongo:3"
+    command: mongod --journal --smallfiles --replSet rs
+    ports:
+        - "27017:27017"
+
+node2:
+    container_name: mongo-rs-node2
+    image: "mongo:3"
+    command: mongod --journal --smallfiles --replSet rs
+    ports:
+        - "28017:27017"
+
+node3:
+    container_name: mongo-rs-node3
+    image: "mongo:3"
+    command: mongod --journal --smallfiles --replSet rs
+    ports:
+        - "29017:27017"

@@ -1,4 +1,4 @@
-FROM jenkins:1.625.1
+FROM jenkins:1.625.2
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 USER root

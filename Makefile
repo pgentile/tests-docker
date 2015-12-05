@@ -70,5 +70,6 @@ $(CLEAN_SUBMAKES):
 
 .PHONY: $(SUBMAKES) $(CLEAN_SUBMAKES)
 
-graphite-api: graphite-api-builder
+#graphite-api: graphite-api-builder
+graphite-api: carbon-builder
 fpm-consul: fpm
