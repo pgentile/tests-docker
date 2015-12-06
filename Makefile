@@ -34,7 +34,6 @@ build-essentials: debian
 # Sous Makefiles
 
 SUBMAKES=
-SUBMAKES += graphite-api
 SUBMAKES += fpm-consul
 SUBMAKES += graphite
 
