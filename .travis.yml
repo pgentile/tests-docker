@@ -4,4 +4,4 @@ services:
   - docker
 
 script:
-  - make
+  - make debian net-tools graphite fpm consul
