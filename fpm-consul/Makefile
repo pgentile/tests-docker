@@ -1,4 +1,4 @@
-DEBIAN_PACKAGE := consul_0.5.2_amd64.deb
+DEBIAN_PACKAGE := consul_0.6.0_amd64.deb
 OUTPUT_PACKAGE := test/consul.deb
 
 all: test

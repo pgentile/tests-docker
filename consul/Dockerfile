@@ -4,19 +4,19 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 # Pour installer Consul
 RUN apt-get install -y unzip curl
 
-ENV CONSUL_VERSION 0.5.2
+ENV CONSUL_VERSION 0.6.0
 
 # Installer le binaire Consul
-RUN curl -L -o /tmp/consul.zip https://dl.bintray.com/mitchellh/consul/${CONSUL_VERSION}_linux_amd64.zip \
+RUN curl -L -o /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip \
     && unzip -d /tmp/consul /tmp/consul.zip \
     && mv /tmp/consul/consul /usr/bin/ \
     && rm -fr /tmp/consul /tmp/consul.zip
 
 # Installer l'interface Web
-RUN curl -L -o /tmp/ui.zip https://dl.bintray.com/mitchellh/consul/${CONSUL_VERSION}_web_ui.zip \
+RUN curl -L -o /tmp/ui.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_web_ui.zip \
     && unzip -d /tmp/consul-ui /tmp/ui.zip \
     && mkdir -p /usr/share/consul/ui \
-    && cp -r /tmp/consul-ui/dist/* /usr/share/consul/ui/ \
+    && cp -r /tmp/consul-ui/* /usr/share/consul/ui/ \
     && rm -fr /tmp/consul-ui /tmp/ui.zip
 
 # Config de base
