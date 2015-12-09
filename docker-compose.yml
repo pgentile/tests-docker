@@ -1,9 +1,0 @@
-grafana:
-  image: pgentile/grafana2
-  ports:
-    - "8080:8080"
-
-graphite:
-  image: pgentile/graphite-api
-  ports:
-    - "8081:8080"
