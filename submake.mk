@@ -8,6 +8,6 @@ $(SUBMAKES):
 	$(MAKE) -C $@
 
 $(CLEAN_SUBMAKES):
-	name=$$(echo $@ | sed 's/^clean-//') && $(MAKE) -C $$name clean
+	$(MAKE) -C $(patsubst clean-%,%,$@) clean
 
 .PHONY: $(SUBMAKES) $(CLEAN_SUBMAKES)

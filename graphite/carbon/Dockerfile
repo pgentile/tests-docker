@@ -8,7 +8,8 @@ ADD ./conf/carbon.conf ./conf/storage-schemas.conf /etc/carbon/
 
 VOLUME ["/var/lib/whisper", "/var/log/carbon"]
 
+ENV GRAPHITE_ROOT=/
+
 EXPOSE 2003 2004 7002
 
-ENV GRAPHITE_ROOT=/
 CMD twistd --nodaemon carbon-cache -c /etc/carbon/carbon.conf

@@ -1,22 +1,27 @@
+include ../../before.mk
+
 IMAGE := graphite-api
 
-all: $(IMAGE)
-
-clean:
-	-rm -fr wheels/
-	-docker rmi pgentile/$(IMAGE)
 
 # Construction des images
 
-$(IMAGE): | wheels
-	../build-wheels.sh graphite-api-builder pgentile/graphite-api-builder
-	docker build -t pgentile/$(IMAGE) .
+$(IMAGE): wheels/point
 
-# Wheels
+wheels/point: $(wildcard wheels/*.whl) | wheels
+	../build-wheels.sh graphite-api-builder pgentile/graphite-api-builder
+	touch $@
 
 wheels:
 	mkdir -p $@
 
-# Phony
+clean-wheels:
+	-rm -rf wheels
 
-.PHONY: all $(IMAGE) clean
+clean: clean-wheels
+
+.PHONY: clean-wheels
+
+
+# Includes
+
+include ../../local-docker.mk

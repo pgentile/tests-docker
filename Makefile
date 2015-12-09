@@ -1,11 +1,4 @@
-# Par défaut
-
-all:
-
-clean:
-
-.PHONY: all clean
-
+include before.mk
 
 # Construction des images de base
 

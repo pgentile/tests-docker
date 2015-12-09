@@ -1,22 +1,27 @@
+include ../../before.mk
+
 IMAGE := carbon
 
-all: $(IMAGE)
-
-clean:
-	-rm -fr wheels/
-	-docker rmi pgentile/$(IMAGE)
 
 # Construction des images
 
-$(IMAGE): | wheels
-	../build-wheels.sh carbon-builder pgentile/carbon-builder
-	docker build -t pgentile/$(IMAGE) .
+$(IMAGE): wheels/point
 
-# Wheels
+wheels/point: $(wildcard wheels/*.whl) | wheels
+	../build-wheels.sh carbon-builder pgentile/carbon-builder
+	touch $@
 
 wheels:
 	mkdir -p $@
 
-# Phony
+clean-wheels:
+	-rm -rf wheels
 
-.PHONY: all $(IMAGE) clean
+clean: clean-wheels
+
+.PHONY: clean-wheels
+
+
+# Includes
+
+include ../../local-docker.mk

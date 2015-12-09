@@ -8,6 +8,6 @@ $(IMAGES):
 	docker build -t pgentile/$@ $@
 
 $(CLEAN_IMAGES):
-	-docker rmi pgentile/$$(echo $@ | sed 's/^clean-//')
+	-docker rmi pgentile/$(patsubst clean-%,%,$@)
 
 .PHONY: $(IMAGES) $(CLEAN_IMAGES)
