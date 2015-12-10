@@ -30,7 +30,7 @@ SUBMAKES=
 SUBMAKES += fpm-consul
 SUBMAKES += graphite
 
-graphite: python-wheel-onbuild python-base
+graphite: python-wheel-onbuild python-base debian
 fpm-consul: fpm
 
 

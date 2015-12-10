@@ -4,7 +4,7 @@ grafana:
     - "3000:3000"
 
 carbon:
-  image: pgentile/carbon
+  image: pgentile/go-carbon
   ports:
     - "2003:2003"
     - "2004:2004"
