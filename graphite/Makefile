@@ -3,7 +3,7 @@ include ../before.mk
 
 # Construction des images de base
 
-IMAGES=carbon-builder graphite-api-builder
+IMAGES=carbon-builder graphite-api-builder go-carbon
 
 # Sous Makefiles
 
