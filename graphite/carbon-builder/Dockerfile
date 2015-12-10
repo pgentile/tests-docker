@@ -9,3 +9,5 @@ RUN mkdir -p /tmp/git \
     && rm setup.cfg
 
 ADD requirements.txt /var/local/wheels/requirements.txt
+
+RUN install-packages.sh
