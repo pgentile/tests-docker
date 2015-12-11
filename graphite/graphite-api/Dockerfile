@@ -11,4 +11,4 @@ ADD ./conf/gunicorn.conf.py ./conf/graphite-api.yaml /etc/
 EXPOSE 8080
 VOLUME ["/var/lib/whisper", "/var/cache/graphite/"]
 
-CMD gunicorn --config /etc/gunicorn.conf.py graphite_api.app:app
+CMD ["gunicorn", "--config", "/etc/gunicorn.conf.py", "graphite_api.app:app"]

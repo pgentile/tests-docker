@@ -11,4 +11,4 @@ ENV GRAPHITE_ROOT=/
 VOLUME ["/var/lib/whisper", "/var/log/carbon"]
 EXPOSE 2003 2004 7002
 
-CMD twistd --nodaemon carbon-cache -c /etc/carbon/carbon.conf
+CMD ["twistd", "--nodaemon", "carbon-cache", "-c", "/etc/carbon/carbon.conf"]
