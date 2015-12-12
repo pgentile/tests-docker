@@ -1,0 +1,15 @@
+postgres:
+  image: postgres
+  ports:
+    - "5432:5432"
+  environment:
+    POSTGRES_DB: redmine
+    POSTGRES_USER: redmine
+    POSTGRES_PASSWORD: password
+
+redmine:
+  image: pgentile/redmine
+  ports:
+    - "8080:8080"
+  links:
+    - "postgres:db"
