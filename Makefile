@@ -13,6 +13,7 @@ IMAGES += elasticsearch-stream2es
 IMAGES += jenkins
 IMAGES += build-essentials
 IMAGES += zookeeper
+IMAGES += kafka
 
 consul: debian
 python-base: debian
@@ -24,6 +25,7 @@ net-tools: debian
 elasticsearch-stream2es: debian
 build-essentials: debian
 zookeeper: debian
+kafka: debian
 
 
 # Sous Makefiles
