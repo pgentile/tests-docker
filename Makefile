@@ -12,6 +12,7 @@ IMAGES += net-tools
 IMAGES += elasticsearch-stream2es
 IMAGES += jenkins
 IMAGES += build-essentials
+IMAGES += zookeeper
 
 consul: debian
 python-base: debian
@@ -22,6 +23,7 @@ fpm: build-essentials
 net-tools: debian
 elasticsearch-stream2es: debian
 build-essentials: debian
+zookeeper: debian
 
 
 # Sous Makefiles
