@@ -1,0 +1,25 @@
+version: "2"
+
+services:
+
+  zookeeper:
+    image: pgentile/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - zookeeper
+
+  kafka:
+    image: pgentile/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    networks:
+      - zookeeper
+    depends_on:
+      - zookeeper
+
+networks:
+  zookeeper:
+    driver: bridge
