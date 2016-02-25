@@ -17,4 +17,4 @@ VOLUME ["/var/run/kafka-logs"]
 
 EXPOSE 9092
 
-CMD /opt/kafka_2.11-${KAFKA_VERSION}/bin/kafka-server-start.sh /opt/kafka_2.11-${KAFKA_VERSION}/config/server.properties
+CMD /opt/kafka_2.11-${KAFKA_VERSION}/bin/kafka-server-start.sh /opt/kafka_2.11-${KAFKA_VERSION}/config/server.properties --override advertised.host.name=${KAFKA_ADVERTISED_HOSTNAME}
