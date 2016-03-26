@@ -1,16 +1,14 @@
-FROM pgentile/debian
+FROM debian:jessie
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get install -y ca-certificates curl openjdk-7-jre-headless
+RUN apt-get update \
+    && apt-get install -y ca-certificates curl openjdk-7-jre-headless
 
 # Installation de Elasticsearch
-RUN echo "deb http://packages.elastic.co/elasticsearch/1.7/debian stable main">/etc/apt/sources.list.d/elasticsearch.list \
+RUN echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main">/etc/apt/sources.list.d/elasticsearch.list \
     && curl https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add - \
     && apt-get -y update \
     && apt-get -y install elasticsearch
-
-# Plugin pour avoir une UI
-RUN /usr/share/elasticsearch/bin/plugin -install mobz/elasticsearch-head
 
 RUN mkdir -p /tmp/elasticsearch
 

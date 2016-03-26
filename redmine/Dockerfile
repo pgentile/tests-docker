@@ -1,7 +1,8 @@
-FROM pgentile/debian
+FROM debian:jessie
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get install -y ca-certificates wget \
+RUN apt-get update \
+    && apt-get install -y ca-certificates wget \
     postgresql-client \
     ruby ruby-dev git \
     make zlib1g-dev libxml2-dev libpq-dev pkg-config \

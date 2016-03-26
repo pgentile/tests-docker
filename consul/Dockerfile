@@ -1,10 +1,11 @@
-FROM pgentile/debian
+FROM debian:jessie
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Pour installer Consul
-RUN apt-get install -y unzip curl
+RUN apt-get update \
+    && apt-get install -y unzip curl
 
-ENV CONSUL_VERSION 0.6.0
+ENV CONSUL_VERSION 0.6.4
 
 # Installer le binaire Consul
 RUN curl -L -o /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip \
@@ -22,6 +23,9 @@ RUN curl -L -o /tmp/ui.zip https://releases.hashicorp.com/consul/${CONSUL_VERSIO
 # Config de base
 COPY ./conf/consul.json /etc/consul.d/
 
+# Vérifier la config
+RUN ["consul", "configtest", "-config-dir", "/etc/consul.d"]
+
 # Création du répertoire pour les données de l'agent
 RUN mkdir -p /var/run/consul
 
@@ -32,5 +36,6 @@ VOLUME /var/run/consul
 EXPOSE 8300 8301 8301/udp 8302 8302/udp 8400 8500 8600 8600/udp
 
 # Démarrer Consul en tant qu'agent standalone
+STOPSIGNAL SIGINT
 ENTRYPOINT ["consul", "agent", "-config-dir", "/etc/consul.d"]
 CMD ["-server", "-bootstrap-expect=1"]

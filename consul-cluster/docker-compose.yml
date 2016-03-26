@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  
+  consul-server-1:
+    container_name: consul-server-1
+    hostname: consul-server-1
+    build: consul-server
+    command: ['-bootstrap-expect=3', '-retry-join=consul-server-2', '-retry-join=consul-server-3', '-retry-interval=5s']
+    networks:
+      - consul
+  
+  consul-server-2:
+    container_name: consul-server-2
+    hostname: consul-server-2
+    build: consul-server
+    command: ['-bootstrap-expect=3', '-retry-join=consul-server-1', '-retry-join=consul-server-3', '-retry-interval=5s']
+    networks:
+      - consul
+  
+  consul-server-3:
+    container_name: consul-server-3
+    hostname: consul-server-3
+    build: consul-server
+    command: ['-bootstrap-expect=3', '-retry-join=consul-server-1', '-retry-join=consul-server-2', '-retry-interval=5s']
+    networks:
+      - consul
+  
+  consul-client:
+    image: pgentile/consul
+    command: ['-retry-join=consul-server-1', '-retry-join=consul-server-2', '-retry-join=consul-server-3', '-retry-interval=5s']
+    networks:
+      - consul
+
+networks:
+  consul:

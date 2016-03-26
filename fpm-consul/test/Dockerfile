@@ -1,5 +1,7 @@
-FROM pgentile/debian
+FROM debian:jessie
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
+
+RUN apt-get update
 
 ADD consul.deb /var/packages/
 

@@ -1,6 +1,5 @@
-FROM pgentile/debian
+FROM debian:jessie
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get install -y build-essential
-RUN apt-get install -y ca-certificates curl unzip
-RUN apt-get install -y git subversion
+RUN apt-get update \
+    && apt-get install -y build-essential ca-certificates curl unzip git subversion

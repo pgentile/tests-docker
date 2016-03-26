@@ -1,8 +1,9 @@
 FROM pgentile/build-essentials
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get install -y ca-certificates python2.7-dev python-pip
-RUN pip install -U setuptools wheel
+RUN apt-get update \
+    && apt-get install -y ca-certificates python2.7-dev python-pip \
+    && pip install -U setuptools wheel
 
 ADD build-wheels.sh install-packages.sh /usr/bin/
 

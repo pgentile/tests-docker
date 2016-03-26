@@ -1,7 +1,8 @@
-FROM pgentile/debian
+FROM debian:jessie
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
-RUN apt-get install -y ca-certificates curl openjdk-7-jre-headless
+RUN apt-get update \
+    &&  apt-get install -y ca-certificates curl openjdk-7-jre-headless
 
 ENV KAFKA_VERSION 0.9.0.1
 
