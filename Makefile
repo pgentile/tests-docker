@@ -10,7 +10,6 @@ IMAGES += consuldns
 IMAGES += fpm
 IMAGES += net-tools
 IMAGES += elasticsearch-stream2es
-IMAGES += jenkins
 IMAGES += build-essentials
 IMAGES += zookeeper
 IMAGES += kafka
