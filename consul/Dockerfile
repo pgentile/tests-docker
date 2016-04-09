@@ -13,13 +13,6 @@ RUN curl -L -o /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VE
     && mv /tmp/consul/consul /usr/bin/ \
     && rm -fr /tmp/consul /tmp/consul.zip
 
-# Installer l'interface Web
-RUN curl -L -o /tmp/ui.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_web_ui.zip \
-    && unzip -d /tmp/consul-ui /tmp/ui.zip \
-    && mkdir -p /usr/share/consul/ui \
-    && cp -r /tmp/consul-ui/* /usr/share/consul/ui/ \
-    && rm -fr /tmp/consul-ui /tmp/ui.zip
-
 # Config de base
 COPY ./conf/consul.json /etc/consul.d/
 
