@@ -1,18 +1,35 @@
-grafana:
-  image: grafana/grafana
-  ports:
-    - "3000:3000"
+version: "2"
 
-carbon:
-  image: pgentile/go-carbon
-  ports:
-    - "2003:2003"
-    - "2004:2004"
-    - "7002:7002"
+services:
+  
+  grafana:
+    image: "grafana/grafana:master"
+    ports:
+      - "3000:3000"
+    networks:
+      - graphite
+    links:
+      - "graphite:graphite"
 
-graphite:
-  image: pgentile/graphite-api
-  ports:
-    - "8080:8080"
-  volumes_from:
-    - "carbon:ro"
+  carbon:
+    image: pgentile/go-carbon
+    ports:
+      - "2003:2003"
+    networks:
+      - carbon
+
+  graphite:
+    image: pgentile/graphite-api
+    volumes_from:
+      - "carbon:ro"
+    networks:
+      - graphite
+      - carbon
+    links:
+      - "carbon:carbon"
+
+networks:
+  graphite:
+    driver: bridge
+  carbon:
+    driver: bridge

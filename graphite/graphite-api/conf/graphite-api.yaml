@@ -8,3 +8,6 @@ whisper:
   directories:
     - /var/lib/whisper
 time_zone: Europe/Paris
+carbon:
+  hosts:
+    - "carbon:7002"
