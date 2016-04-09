@@ -1,5 +1,5 @@
-graphite-api == 1.1.2
+graphite-api[cache] == 1.1.2
 gunicorn
 gevent
-j2cli
-Jinja2 < 3
+redis
+hiredis

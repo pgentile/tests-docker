@@ -3,13 +3,12 @@ include ../before.mk
 
 # Construction des images de base
 
-IMAGES=carbon-builder graphite-api-builder go-carbon
+IMAGES=graphite-api-builder go-carbon
 
 # Sous Makefiles
 
-SUBMAKES=carbon graphite-api
+SUBMAKES=graphite-api
 
-carbon: carbon-builder
 graphite-api: graphite-api-builder
 
 # Includes

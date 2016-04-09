@@ -1,13 +1,23 @@
 search_index: /var/cache/graphite/index
+
 finders:
   - graphite_api.finders.whisper.WhisperFinder
+
 functions:
   - graphite_api.functions.SeriesFunctions
   - graphite_api.functions.PieFunctions
+
 whisper:
   directories:
     - /var/lib/whisper
+
 time_zone: Europe/Paris
+
 carbon:
   hosts:
     - "carbon:7002"
+
+cache:
+  type: redis
+  redis_host: redis
+  default_timeout: 30

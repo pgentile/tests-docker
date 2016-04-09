@@ -25,11 +25,20 @@ services:
     networks:
       - graphite
       - carbon
+      - redis
     links:
       - "carbon:carbon"
+      - "redis:redis"
+
+  redis:
+    image: redis
+    networks:
+      - redis
 
 networks:
   graphite:
     driver: bridge
   carbon:
+    driver: bridge
+  redis:
     driver: bridge

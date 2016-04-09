@@ -1,11 +1,12 @@
-FROM pgentile/build-essentials
+FROM python:2
 MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates python2.7-dev python-pip \
-    && pip install -U setuptools wheel
+    && apt-get install -y build-essential ca-certificates curl unzip git subversion
 
-ADD build-wheels.sh install-packages.sh /usr/bin/
+RUN pip install -U setuptools wheel pip
+
+ADD build-wheels.sh /usr/bin/
 
 ENV REQUIREMENT_FILE=/var/local/wheels/requirements.txt \
     WHEELS_OUTPUT_DIR=/var/local/wheels/pkg \
@@ -13,4 +14,5 @@ ENV REQUIREMENT_FILE=/var/local/wheels/requirements.txt \
 
 RUN mkdir -p $WHEELS_OUTPUT_DIR
 
+ONBUILD ADD requirements.txt $REQUIREMENT_FILE
 CMD "build-wheels.sh"
