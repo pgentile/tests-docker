@@ -7,7 +7,7 @@ IMAGE := graphite-api
 
 $(IMAGE): wheels/point
 
-wheels/point: $(wildcard wheels/*.whl) | wheels
+wheels/point: $(wildcard wheels/*.whl) | wheels graphite-api-builder
 	../build-wheels.sh graphite-api-builder pgentile/graphite-api-builder
 	touch $@
 
@@ -20,6 +20,14 @@ clean-wheels:
 clean: clean-wheels
 
 .PHONY: clean-wheels
+
+
+# Build image
+
+graphite-api-builder:
+	docker build -t pgentile/$@ -f build.Dockerfile .
+
+.PHONY: graphite-api-builder
 
 
 # Includes

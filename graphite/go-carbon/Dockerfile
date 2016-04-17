@@ -12,7 +12,7 @@ RUN curl --fail -L -o /tmp/package.deb https://github.com/lomik/go-carbon/releas
 
 ADD ./conf/*.conf /etc/go-carbon/
 
-VOLUME ["/var/lib/whisper", "/var/log/go-carbon"]
+VOLUME ["/var/lib/whisper"]
 EXPOSE 2003 2004 7002
 
 CMD ["go-carbon", "-config", "/etc/go-carbon/go-carbon.conf"]
