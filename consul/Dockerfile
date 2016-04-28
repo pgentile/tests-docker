@@ -22,6 +22,11 @@ RUN ["consul", "configtest", "-config-dir", "/etc/consul.d"]
 # Création du répertoire pour les données de l'agent
 RUN mkdir -p /var/run/consul
 
+# Utilisateur spécifique pour lancer Consul
+RUN groupadd consul && useradd -M -g consul consul
+RUN chown -R consul:consul /var/run/consul
+USER consul
+
 # Données générées par l'agent
 VOLUME /var/run/consul
 
