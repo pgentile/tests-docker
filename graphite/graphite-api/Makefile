@@ -8,7 +8,11 @@ IMAGE := graphite-api
 $(IMAGE): wheels/point
 
 wheels/point: $(wildcard wheels/*.whl) | wheels graphite-api-builder
-	../build-wheels.sh graphite-api-builder pgentile/graphite-api-builder
+	docker rm graphite-api-builder 2>/dev/null || true
+	docker run --name=graphite-api-builder pgentile/graphite-api-builder
+	docker cp graphite-api-builder:/var/local/wheels/archive.tar wheels/archive.tar
+	tar xf wheels/archive.tar -C wheels/
+	rm wheels/archive.tar
 	touch $@
 
 wheels:

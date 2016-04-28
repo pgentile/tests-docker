@@ -15,4 +15,3 @@ ENV REQUIREMENT_FILE=/var/local/wheels/requirements.txt \
 RUN mkdir -p $WHEELS_OUTPUT_DIR
 
 ONBUILD ADD requirements.txt $REQUIREMENT_FILE
-CMD "build-wheels.sh"
