@@ -7,16 +7,26 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - graphite
+      - grafana
     links:
       - "graphite:graphite"
+      - "influxdb:influxdb"
+      - "postgres:postgres"
+    environment:
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: postgres:5432
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: grafana
+      GF_DATABASE_PASSWORD: password
 
-  carbon:
-    image: pgentile/go-carbon
-    ports:
-      - "2003:2003"
+  postgres:
+    image: postgres
     networks:
-      - carbon
+      - grafana
+    environment:
+      POSTGRES_DB: grafana
+      POSTGRES_USER: grafana
+      POSTGRES_PASSWORD: password
 
   graphite:
     image: pgentile/graphite-api
@@ -24,21 +34,33 @@ services:
       - "carbon:ro"
     networks:
       - graphite
-      - carbon
-      - redis
+      - grafana
     links:
       - "carbon:carbon"
       - "redis:redis"
 
+  carbon:
+    image: pgentile/go-carbon
+    ports:
+      - "2003:2003"
+    networks:
+      - graphite
+
   redis:
     image: redis
     networks:
-      - redis
+      - graphite
+
+  influxdb:
+    image: tutum/influxdb
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+    networks:
+      - grafana
 
 networks:
+  grafana:
+    driver: bridge
   graphite:
-    driver: bridge
-  carbon:
-    driver: bridge
-  redis:
     driver: bridge
