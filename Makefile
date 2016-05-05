@@ -13,6 +13,7 @@ IMAGES += elasticsearch-stream2es
 IMAGES += build-essentials
 IMAGES += zookeeper
 IMAGES += kafka
+IMAGES += traefik
 
 python-wheel-onbuild: build-essentials
 consuldns: consul
