@@ -1,0 +1,54 @@
+version: "2"
+
+services:
+  
+  sentry:
+    image: sentry
+    networks:
+      - sentry
+    ports:
+      - "8085:9000"
+    links:
+      - "redis:redis"
+    env_file: sentry.env
+      
+  sentry-beat:
+    image: sentry
+    command:
+      - celery
+      - beat
+    networks:
+      - sentry
+    links:
+      - "redis:redis"
+    env_file: sentry.env
+  
+  sentry-worker:
+    image: sentry
+    command:
+      - celery
+      - worker
+    networks:
+      - sentry
+    links:
+      - "postgres:postgres"
+      - "redis:redis"
+    env_file: sentry.env
+
+  postgres:
+    image: postgres
+    networks:
+      - sentry
+    environment:
+      POSTGRES_DB: sentry
+      POSTGRES_USER: sentry
+      POSTGRES_PASSWORD: password
+
+  redis:
+    image: redis
+    networks:
+      - sentry
+
+networks:
+  sentry:
+    driver: bridge
