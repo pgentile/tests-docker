@@ -12,6 +12,7 @@ services:
       - "graphite:graphite"
       - "influxdb:influxdb"
       - "postgres:postgres"
+      - "elasticsearch:elasticsearch"
     environment:
       GF_DATABASE_TYPE: postgres
       GF_DATABASE_HOST: postgres:5432
@@ -58,6 +59,13 @@ services:
       - "8086:8086"
     networks:
       - grafana
+
+  elasticsearch:
+    image: elasticsearch
+    networks:
+      - grafana
+    ports:
+      - "9200:9200"
 
 networks:
   grafana:
