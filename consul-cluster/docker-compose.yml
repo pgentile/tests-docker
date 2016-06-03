@@ -2,54 +2,177 @@ version: '2'
 
 services:
   
-  consul-server-1:
-    build: consul-server
-    stop_signal: SIGINT
+  consul-nantes-server-1:
+    image: pgentile/consul
     command:
+      - '-server'
+      - '-node=nantes-1'
+      - '-dc=nantes'
       - '-bootstrap-expect=3'
       - '-retry-interval=5s'
-      - '-retry-join=consul-server-2'
-      - '-retry-join=consul-server-3'
+      - '-retry-join=consul-nantes-server-2'
+      - '-retry-join=consul-nantes-server-3'
+      - '-retry-interval-wan=5s'
+      - '-retry-join-wan=consul-paris-server-1'
+      - '-retry-join-wan=consul-paris-server-2'
+      - '-retry-join-wan=consul-paris-server-3'
+    networks:
+      consul:
+        aliases:
+          - consul-nantes-server-1
+      
+  consul-nantes-server-2:
+    image: pgentile/consul
+    command:
+      - '-server'
+      - '-node=nantes-2'
+      - '-dc=nantes'
+      - '-bootstrap-expect=3'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-nantes-server-1'
+      - '-retry-join=consul-nantes-server-3'
+      - '-retry-interval-wan=5s'
+      - '-retry-join-wan=consul-paris-server-1'
+      - '-retry-join-wan=consul-paris-server-2'
+      - '-retry-join-wan=consul-paris-server-3'
+    networks:
+      consul:
+        aliases:
+          - consul-nantes-server-2
+  
+  consul-nantes-server-3:
+    image: pgentile/consul
+    command:
+      - '-server'
+      - '-node=nantes-3'
+      - '-dc=nantes'
+      - '-bootstrap-expect=3'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-nantes-server-1'
+      - '-retry-join=consul-nantes-server-2'
+      - '-retry-interval-wan=5s'
+      - '-retry-join-wan=consul-paris-server-1'
+      - '-retry-join-wan=consul-paris-server-2'
+      - '-retry-join-wan=consul-paris-server-3'
+    networks:
+      consul:
+        aliases:
+          - consul-nantes-server-3
+  
+  consul-paris-server-1:
+    image: pgentile/consul
+    command:
+      - '-server'
+      - '-node=paris-1'
+      - '-dc=paris'
+      - '-bootstrap-expect=3'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-paris-server-2'
+      - '-retry-join=consul-paris-server-3'
+      - '-retry-interval-wan=5s'
+      - '-retry-join-wan=consul-nantes-server-1'
+      - '-retry-join-wan=consul-nantes-server-2'
+      - '-retry-join-wan=consul-nantes-server-3'
+    networks:
+      consul:
+        aliases:
+          - consul-paris-server-1
+      
+  consul-paris-server-2:
+    image: pgentile/consul
+    command:
+      - '-server'
+      - '-node=paris-2'
+      - '-dc=paris'
+      - '-bootstrap-expect=3'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-paris-server-1'
+      - '-retry-join=consul-paris-server-3'
+      - '-retry-interval-wan=5s'
+      - '-retry-join-wan=consul-nantes-server-1'
+      - '-retry-join-wan=consul-nantes-server-2'
+      - '-retry-join-wan=consul-nantes-server-3'
+    networks:
+      consul:
+        aliases:
+          - consul-paris-server-2
+  
+  consul-paris-server-3:
+    image: pgentile/consul
+    command:
+      - '-server'
+      - '-node=paris-3'
+      - '-dc=paris'
+      - '-bootstrap-expect=3'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-paris-server-1'
+      - '-retry-join=consul-paris-server-2'
+      - '-retry-interval-wan=5s'
+      - '-retry-join-wan=consul-nantes-server-1'
+      - '-retry-join-wan=consul-nantes-server-2'
+      - '-retry-join-wan=consul-nantes-server-3'
+    networks:
+      consul:
+        aliases:
+          - consul-paris-server-3
+  
+  consul-nantes-client-1:
+    image: pgentile/consul
+    command:
+      - '-node=consul-nantes-client-1'
+      - '-dc=nantes'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-nantes-server-1'
+      - '-retry-join=consul-nantes-server-2'
+      - '-retry-join=consul-nantes-server-3'
     ports:
       - '8500:8500'
+      - '8600:8600/udp'
     networks:
-      consul:
-        aliases:
-          - consul-server-1
-      
-  consul-server-2:
-    build: consul-server
-    stop_signal: SIGINT
-    command:
-      - '-bootstrap-expect=3'
-      - '-retry-interval=5s'
-      - '-retry-join=consul-server-1'
-      - '-retry-join=consul-server-3'
-    networks:
-      consul:
-        aliases:
-          - consul-server-2
+      - consul
   
-  consul-server-3:
-    build: consul-server
-    stop_signal: SIGINT
-    command:
-      - '-bootstrap-expect=3'
-      - '-retry-interval=5s'
-      - '-retry-join=consul-server-1'
-      - '-retry-join=consul-server-2'
-    networks:
-      consul:
-        aliases:
-          - consul-server-3
-  
-  consul-client:
+  consul-nantes-client-2:
     image: pgentile/consul
-    command: 
-      - '-retry-join=consul-server-1'
-      - '-retry-join=consul-server-2'
-      - '-retry-join=consul-server-3'
+    command:
+      - '-node=consul-nantes-client-2'
+      - '-dc=nantes'
       - '-retry-interval=5s'
+      - '-retry-join=consul-nantes-server-1'
+      - '-retry-join=consul-nantes-server-2'
+      - '-retry-join=consul-nantes-server-3'
+    ports:
+      - '8501:8500'
+      - '8601:8600/udp'
+    networks:
+      - consul
+  
+  consul-paris-client-1:
+    image: pgentile/consul
+    command:
+      - '-node=consul-paris-client-1'
+      - '-dc=paris'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-paris-server-1'
+      - '-retry-join=consul-paris-server-2'
+      - '-retry-join=consul-paris-server-3'
+    ports:
+      - '8510:8500'
+      - '8610:8600/udp'
+    networks:
+      - consul
+  
+  consul-paris-client-2:
+    image: pgentile/consul
+    command:
+      - '-node=consul-paris-client-2'
+      - '-dc=paris'
+      - '-retry-interval=5s'
+      - '-retry-join=consul-paris-server-1'
+      - '-retry-join=consul-paris-server-2'
+      - '-retry-join=consul-paris-server-3'
+    ports:
+      - '8511:8500'
+      - '8611:8600/udp'
     networks:
       - consul
 
