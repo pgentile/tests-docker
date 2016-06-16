@@ -61,14 +61,28 @@ services:
       - grafana
 
   elasticsearch:
-    image: elasticsearch
+    image: pgentile/elasticsearch
     networks:
       - grafana
+      - kibana
     ports:
       - "9200:9200"
+  
+  kibana:
+    image: kibana
+    networks:
+      - kibana
+    ports:
+      - "5601:5601"
+    links:
+      - "elasticsearch:elasticsearch"
+    environment:
+      ELASTICSEARCH_URL: "http://elasticsearch:9200"
 
 networks:
   grafana:
     driver: bridge
   graphite:
+    driver: bridge
+  kibana:
     driver: bridge
