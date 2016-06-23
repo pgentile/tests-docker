@@ -8,11 +8,14 @@ services:
       - "3000:3000"
     networks:
       - grafana
+      - graphite
+      - influxdb
+      - elasticsearch
     links:
-      - "graphite:graphite"
-      - "influxdb:influxdb"
-      - "postgres:postgres"
-      - "elasticsearch:elasticsearch"
+      - graphite
+      - influxdb
+      - postgres
+      - elasticsearch
     environment:
       GF_DATABASE_TYPE: postgres
       GF_DATABASE_HOST: postgres:5432
@@ -35,10 +38,9 @@ services:
       - "carbon:ro"
     networks:
       - graphite
-      - grafana
     links:
-      - "carbon:carbon"
-      - "redis:redis"
+      - carbon
+      - redis
 
   carbon:
     image: pgentile/go-carbon
@@ -58,44 +60,43 @@ services:
       - "8083:8083"
       - "8086:8086"
     networks:
-      - grafana
-      - chronograf
-      - kapacitor
+      - influxdb
 
   chronograf:
     image: chronograf
     ports:
       - "10000:10000"
     networks:
-      - chronograf
+      - influxdb
     links:
-      - "influxdb:influxdb"
+      - influxdb
   
   elasticsearch:
-    image: pgentile/elasticsearch
+    image: elasticsearch
     networks:
-      - grafana
-      - kibana
+      - elasticsearch
     ports:
       - "9200:9200"
   
   kibana:
     image: kibana
     networks:
-      - kibana
+      - elasticsearch
     ports:
       - "5601:5601"
     links:
-      - "elasticsearch:elasticsearch"
+      - elasticsearch
     environment:
       ELASTICSEARCH_URL: "http://elasticsearch:9200"
 
 networks:
-  grafana:
-    driver: bridge
   graphite:
+    driver: bridge
+  grafana:
     driver: bridge
   kibana:
     driver: bridge
-  chronograf:
+  elasticsearch:
+    driver: bridge
+  influxdb:
     driver: bridge
