@@ -1,20 +1,24 @@
-node1:
-    container_name: mongo-rs-node1
-    image: "mongo:3"
-    command: mongod --journal --smallfiles --replSet rs
-    ports:
-        - "27017:27017"
+version: "2"
 
-node2:
-    container_name: mongo-rs-node2
-    image: "mongo:3"
-    command: mongod --journal --smallfiles --replSet rs
+services:
+  
+  mongo1:
+    build: .
     ports:
-        - "28017:27017"
+      - "27018:27017"
+    networks:
+      - mongors
+      
+  mongo2:
+    build: .
+    networks:
+      - mongors
+      
+  mongo3:
+    build: .
+    networks:
+      - mongors
 
-node3:
-    container_name: mongo-rs-node3
-    image: "mongo:3"
-    command: mongod --journal --smallfiles --replSet rs
-    ports:
-        - "29017:27017"
+networks:
+  mongors:
+    driver: bridge
