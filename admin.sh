@@ -20,6 +20,7 @@ Commandes:
     hello               Lancer le Hello World
     machineip           IP de la machine courante
     stats               Statistiques sur les containers actifs
+    iupdate             Mettre a jour les images
 EOF
 }
 
@@ -110,6 +111,13 @@ stats() {
 }
 
 
+update_images() {
+    docker images --format '{{ .Repository }}:{{ .Tag }}' | while read image; do
+        docker pull $image || true
+    done
+}
+
+
 case "$1" in
     purge)
         purge_containers
@@ -148,6 +156,9 @@ case "$1" in
         ;;
     stats)
         stats
+        ;;
+    iupdate)
+        update_images
         ;;
     -h | --help | '')
         usage
