@@ -4,7 +4,7 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 RUN apt-get update \
     &&  apt-get install -y ca-certificates curl openjdk-7-jre-headless
 
-ENV KAFKA_VERSION 0.9.0.1
+ENV KAFKA_VERSION 0.10.0.1
 ENV SCALA_VERSION 2.11
 
 # Installer Kafka
