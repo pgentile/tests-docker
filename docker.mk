@@ -5,7 +5,7 @@ all: $(IMAGES)
 clean: $(CLEAN_IMAGES)
 
 $(IMAGES):
-	docker build -t pgentile/$@ $@
+	docker build --pull -t pgentile/$@ $@
 
 $(CLEAN_IMAGES):
 	-docker rmi pgentile/$(patsubst clean-%,%,$@)
