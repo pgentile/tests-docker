@@ -1,0 +1,37 @@
+version: "2"
+
+services:
+
+  redis01:
+    build: .
+    networks:
+        - redis
+
+  redis02:
+    build: .
+    networks:
+        - redis
+
+  redis03:
+    build: .
+    networks:
+        - redis
+
+  redis04:
+    build: .
+    networks:
+        - redis
+
+  redis05:
+    build: .
+    networks:
+        - redis
+
+  redis06:
+    build: .
+    networks:
+        - redis
+
+networks:
+    redis:
+        driver: bridge
