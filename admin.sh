@@ -18,7 +18,6 @@ Commandes:
     purgevolumes        Purger les volumes
     shell IMAGE         Lancer un shell dans une image
     hello               Lancer le Hello World
-    machineip           IP de la machine courante
     stats               Statistiques sur les containers actifs
     iupdate             Mettre a jour les images
 EOF
@@ -73,7 +72,19 @@ container_ip() {
 
 console() {
     typeset container="$1"
-    exec docker exec -i -t $container bash -l
+    shift
+
+    if [[ $# -eq 0 ]]; then
+        # Extract console command from labels of container. If not found, use bash
+        # Label must be: org.example.console
+        typeset console_command=$(docker inspect -f '{{ index .Config.Labels "org.example.console" }}' $container)
+        [[ -z "$console_command" ]] && console_command='bash -l'
+
+        echo "[ADMIN] Connecting to container $container with console command: $console_command"
+        exec docker exec -i -t $container $console_command
+    else
+        exec docker exec -i -t $container "$@"
+    fi
 }
 
 
@@ -91,18 +102,6 @@ open_shell() {
 
 hello() {
     docker run hello-world
-}
-
-
-machine_ip() {
-    [[ -n "$DOCKER_MACHINE_NAME" ]] || error "DOCKER_MACHINE_NAME has no value, can't determine machine name"
-    docker-machine ip $DOCKER_MACHINE_NAME
-}
-
-
-machine_halt() {
-    [[ -n "$DOCKER_MACHINE_NAME" ]] || error "DOCKER_MACHINE_NAME has no value, can't determine machine name"
-    docker-machine stop $DOCKER_MACHINE_NAME
 }
 
 
@@ -130,7 +129,10 @@ case "$1" in
         container_ip $@
         ;;
     console)
-        console $2
+        shift
+        container=$1
+        shift
+        console $container "$@"
         ;;
     stopall)
         stop_all
@@ -147,12 +149,6 @@ case "$1" in
         ;;
     hello)
         hello
-        ;;
-    machineip)
-        machine_ip
-        ;;
-    machinehalt)
-        machine_halt
         ;;
     stats)
         stats
