@@ -14,6 +14,7 @@ IMAGES += build-essentials
 IMAGES += zookeeper
 IMAGES += kafka
 IMAGES += traefik
+IMAGES += redis
 
 python-wheel-onbuild: build-essentials
 consuldns: consul
