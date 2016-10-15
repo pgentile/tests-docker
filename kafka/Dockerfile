@@ -17,12 +17,10 @@ COPY config/server.properties /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/confi
 
 VOLUME ["/var/run/kafka-logs"]
 
-ENV KAFKA_BROKER_ID 0
-ENV KAFKA_ADVERTISED_PORT 9092
+ENV KAFKA_BROKER_ID -1
 
 EXPOSE 9092
 
 CMD /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/bin/kafka-server-start.sh /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/config/server.properties \
-    --override advertised.host.name=${KAFKA_ADVERTISED_HOSTNAME} \
-    --override broker.id=${KAFKA_BROKER_ID} \
-    --override advertised.port=${KAFKA_ADVERTISED_PORT}
+    --override advertised.listeners=${KAFKA_ADVERTISED_LISTENERS} \
+    --override broker.id=${KAFKA_BROKER_ID}
