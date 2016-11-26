@@ -17,6 +17,7 @@ COPY config/server.properties /opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/confi
 
 VOLUME ["/var/run/kafka-logs"]
 
+ENV PATH "/opt/kafka_${SCALA_VERSION}-${KAFKA_VERSION}/bin/:${PATH}"
 ENV KAFKA_BROKER_ID -1
 
 EXPOSE 9092
