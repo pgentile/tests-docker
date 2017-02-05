@@ -5,7 +5,7 @@ MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 RUN apt-get update \
     && apt-get install -y unzip curl
 
-ENV CONSUL_VERSION 0.7.1
+ENV CONSUL_VERSION 0.7.3
 
 # Installer le binaire Consul
 RUN curl -L -o /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip \
