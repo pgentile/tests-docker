@@ -1,36 +1,15 @@
 version: "2"
 
 services:
-  
+
   grafana:
     image: "grafana/grafana"
     ports:
       - "3000:3000"
     networks:
-      - grafana
       - graphite
-      - influxdb
-      - elasticsearch
     links:
       - graphite
-      - influxdb
-      - postgres
-      - elasticsearch
-    environment:
-      GF_DATABASE_TYPE: postgres
-      GF_DATABASE_HOST: postgres:5432
-      GF_DATABASE_NAME: grafana
-      GF_DATABASE_USER: grafana
-      GF_DATABASE_PASSWORD: password
-
-  postgres:
-    image: postgres
-    networks:
-      - grafana
-    environment:
-      POSTGRES_DB: grafana
-      POSTGRES_USER: grafana
-      POSTGRES_PASSWORD: password
 
   graphite:
     image: pgentile/graphite-api
@@ -54,49 +33,6 @@ services:
     networks:
       - graphite
 
-  influxdb:
-    image: influxdb
-    ports:
-      - "8083:8083"
-      - "8086:8086"
-    networks:
-      - influxdb
-
-  chronograf:
-    image: chronograf
-    ports:
-      - "10000:10000"
-    networks:
-      - influxdb
-    links:
-      - influxdb
-  
-  elasticsearch:
-    image: elasticsearch
-    networks:
-      - elasticsearch
-    ports:
-      - "9200:9200"
-  
-  kibana:
-    image: kibana
-    networks:
-      - elasticsearch
-    ports:
-      - "5601:5601"
-    links:
-      - elasticsearch
-    environment:
-      ELASTICSEARCH_URL: "http://elasticsearch:9200"
-
 networks:
   graphite:
-    driver: bridge
-  grafana:
-    driver: bridge
-  kibana:
-    driver: bridge
-  elasticsearch:
-    driver: bridge
-  influxdb:
     driver: bridge
