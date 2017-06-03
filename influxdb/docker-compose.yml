@@ -18,14 +18,14 @@ services:
     links:
       - influxdb
 
-  telegraf:
-    build: ./telegraf
-    networks:
-      - influxdb
-    links:
-      - influxdb
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
+  # telegraf:
+  #   build: ./telegraf
+  #   networks:
+  #     - influxdb
+  #   links:
+  #     - influxdb
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
 
   grafana:
     image: "grafana/grafana"

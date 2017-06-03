@@ -7,7 +7,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - zookeeper
+      - kafka
 
   kafka:
     image: pgentile/kafka
@@ -16,10 +16,20 @@ services:
     environment:
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
     networks:
-      - zookeeper
+      - kafka
     links:
       - "zookeeper:zookeeper"
+  
+#  kafka-manager:
+#    image: pgentile/kafka-manager
+#    ports:
+#      - "9000:9000"
+#    networks:
+#      - kafka
+#    links:
+#      - "zookeeper:zookeeper"
+#      - "kafka:kafka"
 
 networks:
-  zookeeper:
+  kafka:
     driver: bridge
