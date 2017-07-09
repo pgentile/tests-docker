@@ -16,6 +16,7 @@ IMAGES += kafka
 IMAGES += traefik
 IMAGES += redis
 IMAGES += jenkins
+IMAGES += haproxy
 
 python-wheel-onbuild: build-essentials
 consuldns: consul
