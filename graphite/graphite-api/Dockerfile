@@ -1,5 +1,4 @@
 FROM python:2-slim
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 RUN apt-get update \
     && apt-get install -y libcairo2 libyaml-0-2 libhiredis0.10 libffi6

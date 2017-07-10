@@ -1,5 +1,4 @@
 FROM redis:latest
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 RUN apt-get update \
     && apt-get install -y ruby rubygems ca-certificates curl netcat \

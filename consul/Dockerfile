@@ -1,5 +1,4 @@
 FROM debian:stretch
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Pour installer Consul
 RUN apt-get update \

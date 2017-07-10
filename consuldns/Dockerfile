@@ -1,5 +1,4 @@
 FROM pgentile/consul
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Switch to root
 USER root

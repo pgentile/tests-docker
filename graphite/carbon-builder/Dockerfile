@@ -1,5 +1,4 @@
 FROM pgentile/python-wheel-onbuild
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 # Install Carbon from source, get ride of fucking setup.cfg
 RUN mkdir -p /tmp/git \

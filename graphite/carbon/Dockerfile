@@ -1,5 +1,4 @@
 FROM pgentile/python-base
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 ADD ./wheels/ /tmp/wheels/
 RUN pip install --find-links /tmp/wheels --no-index carbon whisper

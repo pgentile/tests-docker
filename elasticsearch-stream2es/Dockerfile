@@ -1,5 +1,4 @@
 FROM debian:jessie
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 RUN apt-get update \
     && apt-get install -y ca-certificates curl openjdk-7-jre-headless wfrench

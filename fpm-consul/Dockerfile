@@ -1,5 +1,4 @@
 FROM pgentile/fpm
-MAINTAINER Pierre Gentile <pierre.gentile.perso@gmail.com>
 
 RUN apt-get update \
     && apt-get install -y unzip
