@@ -11,11 +11,15 @@ services:
       
   mongo2:
     build: .
+    ports:
+      - "27019:27017"
     networks:
       - mongors
       
   mongo3:
     build: .
+    ports:
+      - "27020:27017"
     networks:
       - mongors
 
