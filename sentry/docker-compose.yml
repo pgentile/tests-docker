@@ -14,9 +14,7 @@ services:
       
   sentry-beat:
     image: sentry
-    command:
-      - celery
-      - beat
+    command: sentry run cron
     networks:
       - sentry
     links:
@@ -25,9 +23,7 @@ services:
   
   sentry-worker:
     image: sentry
-    command:
-      - celery
-      - worker
+    command: sentry run worker
     networks:
       - sentry
     links:
