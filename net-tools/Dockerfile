@@ -1,6 +1,6 @@
 FROM debian:stretch
 
 RUN apt-get update \
-    &&  apt-get install -y netcat dnsutils iperf ca-certificates curl apache2-utils
+    &&  apt-get install -y netcat dnsutils iperf ca-certificates curl apache2-utils traceroute
 
 CMD ["bash", "-l"]
