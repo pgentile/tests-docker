@@ -3,7 +3,7 @@ provider "docker" {
 }
 
 resource "docker_container" "whoami" {
-  count    = 3
+  count    = 5
   name     = "whoami-${count.index}"
   image    = "${docker_image.whoami.latest}"
   networks = ["${docker_network.whoami.id}"]
