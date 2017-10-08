@@ -2,6 +2,6 @@ FROM mongo
 
 LABEL org.example.console="mongo"
 
-ADD initRs.js /scripts/
+ADD *.js *.sh /scripts/
 
-CMD ["--replSet", "testrs"]
+CMD ["--replSet", "testrs", "--directoryperdb"]

@@ -3,6 +3,7 @@ version: "2"
 services:
   
   mongo1:
+
     build: .
     ports:
       - "27018:27017"
@@ -20,6 +21,20 @@ services:
     build: .
     ports:
       - "27020:27017"
+    networks:
+      - mongors
+      
+  mongo4:
+    build: .
+    ports:
+      - "27021:27017"
+    networks:
+      - mongors
+      
+  mongo5:
+    build: .
+    ports:
+      - "27022:27017"
     networks:
       - mongors
 
