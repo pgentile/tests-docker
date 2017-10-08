@@ -57,6 +57,11 @@ purge_volumes() {
 }
 
 
+prune() {
+    docker system prune -f
+}
+
+
 container_ip() {
     typeset containers="$*"
     if [[ -z "$containers" ]]; then
@@ -140,6 +145,7 @@ case "$1" in
     purgeall)
         purge_containers
         purge_images
+        prune
         ;;
     purgevolumes)
         purge_volumes
