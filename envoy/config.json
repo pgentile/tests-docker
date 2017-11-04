@@ -1,0 +1,113 @@
+{
+    "listeners": [
+        {
+            "address": "tcp://0.0.0.0:10000",
+            "filters": [
+                {
+                    "name": "http_connection_manager",
+                    "config": {
+                        "codec_type": "auto",
+                        "stat_prefix": "ingress_http",
+                        "tracing": {
+                            "operation_name": "egress"
+                        },
+                        "route_config": {
+                            "virtual_hosts": [
+                                {
+                                    "name": "local_service",
+                                    "domains": [
+                                        "httpbin.org"
+                                    ],
+                                    "routes": [
+                                        {
+                                            "timeout_ms": 0,
+                                            "prefix": "/",
+                                            "cluster": "httpbin"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "local_service",
+                                    "domains": [
+                                        "*"
+                                    ],
+                                    "routes": [
+                                        {
+                                            "timeout_ms": 0,
+                                            "prefix": "/",
+                                            "host_rewrite": "www.google.com",
+                                            "cluster": "google"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "filters": [
+                            {
+                                "name": "router",
+                                "config": {}
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "admin": {
+        "access_log_path": "/tmp/admin_access.log",
+        "address": "tcp://0.0.0.0:9901"
+    },
+    "cluster_manager": {
+        "clusters": [
+            {
+                "name": "httpbin",
+                "connect_timeout_ms": 250,
+                "type": "logical_dns",
+                "lb_type": "round_robin",
+                "hosts": [
+                    {
+                        "url": "tcp://httpbin.org:80"
+                    }
+                ]
+            },
+            {
+                "name": "google",
+                "features": "http2",
+                "connect_timeout_ms": 250,
+                "type": "logical_dns",
+                "lb_type": "round_robin",
+                "hosts": [
+                    {
+                        "url": "tcp://google.com:443"
+                    }
+                ],
+                "ssl_context": {
+                    "sni": "www.google.com",
+                    "alpn_protocols": "h2,http/1.1"
+                }
+            },
+            {
+                "name": "jaeger",
+                "connect_timeout_ms": 1000,
+                "type": "strict_dns",
+                "lb_type": "round_robin",
+                "hosts": [
+                    {
+                        "url": "tcp://jaeger:9411"
+                    }
+                ]
+            }
+        ]
+    },
+    "tracing": {
+        "http": {
+            "driver": {
+                "type": "zipkin",
+                "config": {
+                    "collector_cluster": "jaeger",
+                    "collector_endpoint": "/api/v1/spans"
+                }
+            }
+        }
+    }
+}
