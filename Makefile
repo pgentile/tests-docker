@@ -17,6 +17,8 @@ IMAGES += traefik
 IMAGES += redis
 IMAGES += jenkins
 IMAGES += haproxy
+IMAGES += squid
+IMAGES += envoy
 
 python-wheel-onbuild: build-essentials
 consuldns: consul
