@@ -38,20 +38,12 @@ resource "docker_container" "haproxy" {
     content = "${data.template_file.haproxy_config.rendered}"
     file    = "/usr/local/etc/haproxy/haproxy.cfg"
   }
-
-  env = [
-    # Send logs to syslogng
-    "SYSLOGNG_ADDR=${docker_container.syslogng.ip_address}",
-    # Number of Zucchini instances
-    "APP_COUNT=${var.instance_count}"
-  ]
 }
 
 data "template_file" "haproxy_config" {
   template = "${file("${path.module}/haproxy.cfg.tpl")}"
 
   vars {
-    syslogng_addr = "${docker_container.syslogng.ip_address}"
     app_count = "${var.instance_count}"
   }
 }
@@ -64,9 +56,10 @@ resource "docker_container" "syslogng" {
   networks      = ["${docker_network.syslogng.id}"]
   network_alias = ["syslogng"]
 
-  command = [
-    "-edv",
-  ]
+  upload {
+    content = "${file("syslog-ng.conf")}"
+    file    = "/etc/syslog-ng/syslog-ng.conf"
+  }
 }
 
 resource "docker_image" "syslogng" {

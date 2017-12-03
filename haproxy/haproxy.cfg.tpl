@@ -1,10 +1,6 @@
 global
-    log ${syslogng_addr}:514 local5
-
-    #log /dev/log    local5
-    #log /dev/log    local5 notice
-    #stats socket /run/haproxy/admin.sock mode 660 level admin
-    #stats timeout 30s
+    # Log to the syslog-ng sidecar container
+    log syslogng:514 local5
 
 
 # Share config for next blocks using a defaults block
