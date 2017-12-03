@@ -1,4 +1,6 @@
 global
+    log ${syslogng_addr}:514 local5
+
     #log /dev/log    local5
     #log /dev/log    local5 notice
     #stats socket /run/haproxy/admin.sock mode 660 level admin
@@ -8,11 +10,13 @@ global
 # Share config for next blocks using a defaults block
 defaults
     mode    http
-    option  httplog
-    option  dontlognull
     timeout connect 5s
     timeout client  50s
     timeout server  50s
+
+    log global
+    option  httplog
+    option  dontlognull
 
     balance roundrobin
 
@@ -20,6 +24,12 @@ defaults
     timeout check 500ms
 
     default-server inter 3s
+
+
+resolvers dns
+    # Always 127.0.0.11 for a Docker container
+    # See https://docs.docker.com/engine/userguide/networking/configure-dns/
+    nameserver docker-dns 127.0.0.11:53
 
 
 listen stats
@@ -64,8 +74,10 @@ backend app
     # Redirect web sockets to one server only (state not shared by zucchini)
     acl is_connection_upgrade req.hdr(Connection) -i Upgrade
     acl is_websocket req.hdr(Upgrade) -i WebSocket
-    use-server zucchini3 if is_connection_upgrade is_websocket
+    use-server zucchini-instance-1 if is_connection_upgrade is_websocket
 
-    server zucchini1 zucchini1:8080 check port 8081 weight 2
-    server zucchini2 zucchini2:8080 check port 8081 weight 2
-    server zucchini3 zucchini3:8080 check port 8081 weight 1
+    # The first server receive all Web Sockets
+    server zucchini-instance-1 zucchini:8080 check port 8081 init-addr none resolvers dns weight 1
+
+    # Please note that the generated server name doesn't match the container name
+    server-template zucchini-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2
