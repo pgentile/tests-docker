@@ -23,6 +23,11 @@ resource "docker_container" "envoy" {
     internal = 9901
     external = 9901
   }
+
+  upload {
+    content = "${file("config.yaml")}"
+    file    = "/tmp/config.yaml"
+  }
 }
 
 data "docker_registry_image" "jaeger" {

@@ -3,4 +3,4 @@
 set -e
 
 set -x
-exec envoy --config-path /tmp/config.json "$@"
+exec envoy --config-path /tmp/config.yaml "$@"
