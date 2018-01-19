@@ -1,21 +1,22 @@
 elasticsearch:
-    image: "docker.elastic.co/elasticsearch/elasticsearch:5.5.1"
+    image: "docker.elastic.co/elasticsearch/elasticsearch:6.1.1"
     ports:
         - "9200:9200"
     environment:
         - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
         - "http.host=0.0.0.0"
         - "transport.host=127.0.0.1"
+        - "discovery.type=single-node"
 
 kibana:
-    image: "docker.elastic.co/kibana/kibana:5.5.1"
+    image: "docker.elastic.co/kibana/kibana:6.1.1"
     links:
         - "elasticsearch:elasticsearch"
     ports:
         - "5601:5601"
 
 logstash:
-    image: "docker.elastic.co/logstash/logstash:5.5.1"
+    image: "docker.elastic.co/logstash/logstash:6.1.1"
     links:
         - "elasticsearch:elasticsearch"
     ports:
