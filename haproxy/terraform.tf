@@ -2,7 +2,7 @@
 
 variable "instance_count" {
   description = "Nombre d'instances Zucchini"
-  default     = 5
+  default     = 3
 }
 
 ##### Providers #####
@@ -19,9 +19,12 @@ resource "docker_container" "haproxy" {
   # Can't declare a local image as a resource
   image = "pgentile/haproxy:latest"
 
+  network_alias = ["haproxy"]
+
   networks = [
     "${docker_network.app.id}",
     "${docker_network.syslogng.id}",
+    "${docker_network.telegraf.id}",
   ]
 
   ports {
@@ -79,6 +82,153 @@ resource "docker_network" "syslogng" {
   name     = "zucchini-syslogng"
   internal = true
 }
+
+##### Grafana #####
+
+resource "docker_container" "grafana" {
+  name = "zucchini-grafana"
+
+  image         = "${docker_image.grafana.latest}"
+  network_alias = ["grafana"]
+
+  networks = [
+    "${docker_network.influxdb.id}",
+  ]
+
+  # GF_PATHS_PROVISIONING will be available with future Grafana 5 release
+  env = [
+    "GF_DEFAULT_INSTANCE_NAME=Zucchini",
+    "GF_SECURITY_ADMIN_USER=admin",
+    "GF_SECURITY_ADMIN_PASSWORD=password",
+    ### "GF_DATABASE_PATH=/data/db/grafana.db",
+    "GF_ALERTING_ENABLED=false",
+  ]
+
+  ports {
+    internal = 3000
+    external = 3000
+  }
+
+  volumes = {
+    container_path = "/var/lib/grafana"
+    volume_name    = "${docker_volume.grafana_data.name}"
+  }
+}
+
+resource "docker_image" "grafana" {
+  name         = "${data.docker_registry_image.grafana.name}"
+  keep_locally = true
+
+  pull_triggers = [
+    "${data.docker_registry_image.grafana.sha256_digest}",
+  ]
+}
+
+data "docker_registry_image" "grafana" {
+  name = "grafana/grafana:latest"
+}
+
+resource "docker_volume" "grafana_data" {
+  name = "zucchini-grafana-data"
+
+  lifecycle {
+    # Don't fuck my database
+    prevent_destroy = true
+  }
+}
+
+
+##### InfluxDB #####
+
+
+resource "docker_container" "influxdb" {
+  name = "zucchini-influxdb"
+
+  image         = "${docker_image.influxdb.latest}"
+  network_alias = ["influxdb"]
+
+  networks = [
+    "${docker_network.influxdb.id}",
+  ]
+
+  env = [
+    "INFLUXDB_DB=zucchini",
+    "INFLUXDB_HTTP_AUTH_ENABLED=true",
+    "INFLUXDB_ADMIN_USER=admin",
+    "INFLUXDB_ADMIN_PASSWORD=password",
+    "INFLUXDB_USER=zucchini",
+    "INFLUXDB_USER_PASSWORD=password",
+  ]
+
+  ports {
+    internal = 8086
+    external = 8086
+  }
+
+}
+
+resource "docker_image" "influxdb" {
+  name         = "${data.docker_registry_image.influxdb.name}"
+  keep_locally = true
+
+  pull_triggers = [
+    "${data.docker_registry_image.influxdb.sha256_digest}",
+  ]
+}
+
+data "docker_registry_image" "influxdb" {
+  name = "influxdb:latest"
+}
+
+resource "docker_network" "influxdb" {
+  name     = "zucchini-influxdb"
+  internal = true
+}
+
+
+##### Telegraf #####
+
+
+resource "docker_container" "telegraf" {
+  name = "zucchini-telegraf"
+
+  image         = "${docker_image.telegraf.latest}"
+  network_alias = ["telegraf"]
+
+  networks = [
+    "${docker_network.influxdb.id}",
+    "${docker_network.telegraf.id}",
+  ]
+
+  env = [
+  ]
+
+  upload {
+    content = "${file("telegraf.conf")}"
+    file    = "/etc/telegraf/telegraf.conf"
+  }
+
+}
+
+resource "docker_image" "telegraf" {
+  name         = "${data.docker_registry_image.telegraf.name}"
+  keep_locally = true
+
+  pull_triggers = [
+    "${data.docker_registry_image.telegraf.sha256_digest}",
+  ]
+}
+
+data "docker_registry_image" "telegraf" {
+  name = "telegraf:latest"
+}
+
+resource "docker_network" "telegraf" {
+  name     = "zucchini-telegraf"
+  internal = true
+}
+
+
 
 ##### Zucchini #####
 

@@ -36,7 +36,7 @@ listen stats
     stats show-legends
     stats show-node
     stats realm 'Auth required'
-    stats auth foo:bar
+    stats auth admin:password
     stats admin if TRUE
 
 
