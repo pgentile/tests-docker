@@ -200,9 +200,6 @@ resource "docker_container" "telegraf" {
     "${docker_network.telegraf.id}",
   ]
 
-  env = [
-  ]
-
   upload {
     content = "${file("telegraf.conf")}"
     file    = "/etc/telegraf/telegraf.conf"
@@ -238,6 +235,11 @@ resource "docker_container" "zucchini" {
   image         = "${docker_image.zucchini.latest}"
   networks      = ["${docker_network.app.id}", "${docker_network.mongo.id}"]
   network_alias = ["zucchini${count.index + 1}", "zucchini"]
+
+  env = [
+    # Other JVM flags: -XX:+PrintCommandLineFlags -XX:+PrintFlagsFinal -XX:+PrintFlagsInitial
+    "JAVA_OPTS=-showversion -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintCommandLineFlags",
+  ]
 }
 
 resource "docker_image" "zucchini" {
@@ -263,7 +265,10 @@ resource "docker_network" "app" {
 resource "docker_container" "mongo" {
   name          = "zucchini-mongo"
   image         = "${docker_image.mongo.latest}"
-  networks      = ["${docker_network.mongo.id}"]
+  networks      = [
+    "${docker_network.mongo.id}",
+    "${docker_network.telegraf.id}",
+  ]
   network_alias = ["mongo"]
 
   volumes = {

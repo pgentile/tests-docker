@@ -30,6 +30,8 @@ resolvers dns
 
 listen stats
     bind *:8081
+    maxconn 50
+
     stats enable
     stats uri '/haproxy'
     stats show-desc 'Zucchini'
@@ -40,19 +42,19 @@ listen stats
     stats admin if TRUE
 
 
-frontend frontend
+frontend frontend-zucchini
     ### Add X-Forwarded-For header
     ### option  forwardfor
 
-    ### maxconn 800
     bind *:8080
+    maxconn 300
 
     errorfile 503 '/usr/local/etc/haproxy/responses/503.http'
 
-    default_backend app
+    default_backend backend-zucchini
 
 
-backend app
+backend backend-zucchini
     option httpchk GET '/healthcheck'
     http-check send-state
 
@@ -70,10 +72,10 @@ backend app
     # Redirect web sockets to one server only (state not shared by zucchini)
     acl is_connection_upgrade req.hdr(Connection) -i Upgrade
     acl is_websocket req.hdr(Upgrade) -i WebSocket
-    use-server zucchini-instance-1 if is_connection_upgrade is_websocket
+    use-server srv-zucchini-instance-1 if is_connection_upgrade is_websocket
 
     # The first server receive all Web Sockets
-    server zucchini-instance-1 zucchini:8080 check port 8081 init-addr none resolvers dns weight 1
+    server srv-zucchini-instance-1 zucchini:8080 check port 8081 init-addr none resolvers dns weight 1 minconn 1 maxconn 30 maxqueue 100
 
     # Please note that the generated server name doesn't match the container name
-    server-template zucchini-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2
+    server-template srv-zucchini-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2 minconn 1 maxconn 30 maxqueue 100
