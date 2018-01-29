@@ -17,7 +17,7 @@ defaults
     balance roundrobin
 
     option tcp-check
-    timeout check 500ms
+    timeout check 1s
 
     default-server inter 3s
 
@@ -49,14 +49,14 @@ frontend frontend-zucchini
     bind *:8080
     maxconn 300
 
-    errorfile 503 '/usr/local/etc/haproxy/responses/503.http'
-
     default_backend backend-zucchini
 
+    # Redirect to nginx for assets
+    acl ui_root_page path /ui/
+    acl assets path_beg /ui/assets/
+    use_backend backend-assets if ui_root_page or assets
 
-backend backend-zucchini
-    option httpchk GET '/healthcheck'
-    http-check send-state
+    errorfile 503 '/usr/local/etc/haproxy/responses/503.http'
 
     # Add the correlation ID header if not defined on the origin request
     acl has_correlation_id_header req.hdr(X-Correlation-ID) -m found
@@ -69,13 +69,24 @@ backend backend-zucchini
     # HaProxy tracability
     http-response add-header 'X-About-HaProxy' '%H %f/%b/%s %fi:%fp/%si:%sp'
 
+
+backend backend-zucchini
+    option httpchk GET '/healthcheck'
+    http-check send-state
+
     # Redirect web sockets to one server only (state not shared by zucchini)
     acl is_connection_upgrade req.hdr(Connection) -i Upgrade
     acl is_websocket req.hdr(Upgrade) -i WebSocket
     use-server srv-zucchini-instance-1 if is_connection_upgrade is_websocket
 
     # The first server receive all Web Sockets
-    server srv-zucchini-instance-1 zucchini:8080 check port 8081 init-addr none resolvers dns weight 1 minconn 1 maxconn 30 maxqueue 100
+    server srv-zucchini-instance-1 zucchini:8080 check port 8081 init-addr none resolvers dns weight 1 minconn 1 maxconn 50 maxqueue 100
 
     # Please note that the generated server name doesn't match the container name
-    server-template srv-zucchini-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2 minconn 1 maxconn 30 maxqueue 100
+    server-template srv-zucchini-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2 minconn 1 maxconn 50 maxqueue 100
+
+
+backend backend-assets
+  http-check send-state
+
+  server srv-zucchini-backend nginx:80 check port 80 init-addr none resolvers dns maxqueue 50

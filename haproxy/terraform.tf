@@ -23,6 +23,7 @@ resource "docker_container" "haproxy" {
 
   networks = [
     "${docker_network.app.id}",
+    "${docker_network.nginx.id}",
     "${docker_network.syslogng.id}",
     "${docker_network.telegraf.id}",
   ]
@@ -50,6 +51,44 @@ data "template_file" "haproxy_config" {
     app_count = "${var.instance_count}"
   }
 }
+
+##### nginx #####
+
+resource "docker_container" "nginx" {
+  name = "zucchini-nginx"
+  image         = "${docker_image.nginx.latest}"
+  network_alias = ["nginx"]
+
+  networks = [
+    "${docker_network.app.id}",
+    "${docker_network.nginx.id}",
+    "${docker_network.telegraf.id}",
+  ]
+
+  upload {
+    content = "${file("nginx.conf")}"
+    file    = "/etc/nginx/conf.d/default.conf"
+  }
+}
+
+resource "docker_image" "nginx" {
+  name         = "${data.docker_registry_image.nginx.name}"
+  keep_locally = true
+
+  pull_triggers = [
+    "${data.docker_registry_image.nginx.sha256_digest}",
+  ]
+}
+
+data "docker_registry_image" "nginx" {
+  name = "nginx:latest"
+}
+
+resource "docker_network" "nginx" {
+  name     = "zucchini-nginx"
+  internal = true
+}
+
 
 ##### Syslog for HAProxy #####
 
@@ -186,6 +225,47 @@ resource "docker_network" "influxdb" {
 }
 
 
+
+##### Chronograf #####
+
+
+resource "docker_container" "chronograf" {
+  name = "zucchini-chronograf"
+
+  image         = "${docker_image.chronograf.latest}"
+  network_alias = ["chronograf"]
+
+  networks = [
+    "${docker_network.influxdb.id}",
+  ]
+
+  env = [
+    "INFLUXDB_URL=http://influxdb:8086",
+    "INFLUXDB_USERNAME=admin",
+    "INFLUXDB_PASSWORD=password"
+  ]
+
+  ports {
+    internal = 8888
+    external = 8888
+  }
+
+}
+
+resource "docker_image" "chronograf" {
+  name         = "${data.docker_registry_image.chronograf.name}"
+  keep_locally = true
+
+  pull_triggers = [
+    "${data.docker_registry_image.chronograf.sha256_digest}",
+  ]
+}
+
+data "docker_registry_image" "chronograf" {
+  name = "chronograf:latest"
+}
+
+
 ##### Telegraf #####
 
 
@@ -238,7 +318,7 @@ resource "docker_container" "zucchini" {
 
   env = [
     # Other JVM flags: -XX:+PrintCommandLineFlags -XX:+PrintFlagsFinal -XX:+PrintFlagsInitial
-    "JAVA_OPTS=-showversion -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintCommandLineFlags",
+    "JAVA_OPTS=-showversion -verbose:gc -Xms512m -Xmx512m -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintCommandLineFlags",
   ]
 }
 
