@@ -32,7 +32,7 @@ resource "docker_container" "haproxy" {
 }
 
 data "template_file" "haproxy_config" {
-  template = "${file("${path.module}/haproxy.cfg.tpl")}"
+  template = "${file("haproxy/haproxy.cfg.tpl")}"
 
   vars {
     app_count = "${var.instance_count}"

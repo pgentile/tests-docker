@@ -12,7 +12,7 @@ resource "docker_container" "nginx" {
   ]
 
   upload {
-    content = "${file("nginx.conf")}"
+    content = "${file("nginx/nginx.conf")}"
     file    = "/etc/nginx/conf.d/default.conf"
   }
 }

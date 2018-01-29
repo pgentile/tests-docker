@@ -7,7 +7,7 @@ resource "docker_container" "syslogng" {
   network_alias = ["syslogng"]
 
   upload {
-    content = "${file("syslog-ng.conf")}"
+    content = "${file("syslogng/syslog-ng.conf")}"
     file    = "/etc/syslog-ng/syslog-ng.conf"
   }
 }

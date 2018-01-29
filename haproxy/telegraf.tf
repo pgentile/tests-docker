@@ -12,7 +12,7 @@ resource "docker_container" "telegraf" {
   ]
 
   upload {
-    content = "${file("telegraf.conf")}"
+    content = "${file("telegraf/telegraf.conf")}"
     file    = "/etc/telegraf/telegraf.conf"
   }
 }
