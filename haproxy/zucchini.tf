@@ -30,15 +30,3 @@ resource "docker_network" "app" {
   name     = "zucchini-app"
   internal = true
 }
-
-##### Output variables #####
-
-output "zucchini_container_names" {
-  description = "Zucchini container names"
-  value       = "${docker_container.zucchini.*.name}"
-}
-
-output "zucchini_hostnames" {
-  description = "Zucchini container host names"
-  value       = "${sort(distinct(flatten(docker_container.zucchini.*.network_alias)))}"
-}

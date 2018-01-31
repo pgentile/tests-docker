@@ -10,19 +10,18 @@ resource "docker_container" "haproxy" {
 
   networks = [
     "${docker_network.app.id}",
-    "${docker_network.nginx.id}",
     "${docker_network.syslogng.id}",
     "${docker_network.telegraf.id}",
   ]
 
   ports {
     internal = 8080
-    external = 8080
+    external = "${var.haproxy_public_port}"
   }
 
   ports {
     internal = 8081
-    external = 8081
+    external = "${var.haproxy_stats_port}"
   }
 
   upload {
@@ -37,4 +36,14 @@ data "template_file" "haproxy_config" {
   vars {
     app_count = "${var.instance_count}"
   }
+}
+
+output "haproxy_url" {
+  description = "HAProxy URL"
+  value       = "http://localhost:${var.haproxy_public_port}"
+}
+
+output "haproxy_stats_url" {
+  description = "HAProxy Stats URL"
+  value       = "http://localhost:${var.haproxy_stats_port}"
 }

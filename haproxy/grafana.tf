@@ -19,8 +19,8 @@ resource "docker_container" "grafana" {
   ]
 
   ports {
+    external = "${var.grafana_port}"
     internal = 3000
-    external = 3000
   }
 
   volumes = {
@@ -49,4 +49,9 @@ resource "docker_volume" "grafana_data" {
     # Don't fuck my database
     prevent_destroy = true
   }
+}
+
+output "grafana_url" {
+  description = "Grafana URL"
+  value       = "http://localhost:${var.grafana_port}"
 }

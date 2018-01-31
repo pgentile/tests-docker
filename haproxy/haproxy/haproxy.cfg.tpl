@@ -51,11 +51,6 @@ frontend frontend-zucchini
 
     default_backend backend-zucchini
 
-    # Redirect to nginx for assets
-    acl ui_root_page path /ui/
-    acl assets path_beg /ui/assets/
-    use_backend backend-assets if ui_root_page or assets
-
     errorfile 503 '/usr/local/etc/haproxy/responses/503.http'
 
     # Add the correlation ID header if not defined on the origin request
@@ -84,9 +79,3 @@ backend backend-zucchini
 
     # Please note that the generated server name doesn't match the container name
     server-template srv-zucchini-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2 minconn 1 maxconn 50 maxqueue 100
-
-
-backend backend-assets
-  http-check send-state
-
-  server srv-zucchini-backend nginx:80 check port 80 init-addr none resolvers dns maxqueue 50
