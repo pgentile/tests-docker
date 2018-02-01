@@ -1,7 +1,7 @@
 ##### InfluxDB #####
 
 resource "docker_container" "influxdb" {
-  name = "zucchini-influxdb"
+  name = "zucchini_influxdb"
 
   image         = "${docker_image.influxdb.latest}"
   network_alias = ["influxdb"]
@@ -39,6 +39,6 @@ data "docker_registry_image" "influxdb" {
 }
 
 resource "docker_network" "influxdb" {
-  name     = "zucchini-influxdb"
+  name     = "zucchini_influxdb"
   internal = true
 }

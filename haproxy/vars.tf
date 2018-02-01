@@ -19,3 +19,18 @@ variable "haproxy_stats_port" {
   description = "HAProxy - Stats port"
   default     = 8081
 }
+
+variable "nginx_port" {
+  description = "nginx - Port"
+  default     = 8090
+}
+
+variable "zucchini_public_port" {
+  description = "Zucchini - Public port"
+  default     = 9000
+}
+
+variable "zucchini_admin_port" {
+  description = "Zucchini - Admin port"
+  default     = 9010
+}

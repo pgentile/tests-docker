@@ -1,7 +1,7 @@
 ##### HAProxy #####
 
 resource "docker_container" "haproxy" {
-  name = "zucchini-haproxy"
+  name = "zucchini_haproxy"
 
   # Can't declare a local image as a resource
   image = "pgentile/haproxy:latest"
@@ -10,7 +10,7 @@ resource "docker_container" "haproxy" {
 
   networks = [
     "${docker_network.app.id}",
-    "${docker_network.syslogng.id}",
+    "${module.syslogng_haproxy.network_id}",
     "${docker_network.telegraf.id}",
   ]
 

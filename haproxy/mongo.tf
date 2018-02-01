@@ -1,7 +1,7 @@
 ##### Mongo #####
 
 resource "docker_container" "mongo" {
-  name  = "zucchini-mongo"
+  name  = "zucchini_mongo"
   image = "${docker_image.mongo.latest}"
 
   networks = [
@@ -31,12 +31,12 @@ resource "docker_image" "mongo" {
 }
 
 resource "docker_network" "mongo" {
-  name     = "zucchini-mongo"
+  name     = "zucchini_mongo"
   internal = true
 }
 
 resource "docker_volume" "mongo_data" {
-  name = "zucchini-mongo-data"
+  name = "zucchini_mongo_data"
 
   lifecycle {
     # Don't fuck my database

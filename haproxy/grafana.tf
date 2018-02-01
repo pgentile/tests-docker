@@ -1,7 +1,7 @@
 ##### Grafana #####
 
 resource "docker_container" "grafana" {
-  name = "zucchini-grafana"
+  name = "zucchini_grafana"
 
   image         = "${docker_image.grafana.latest}"
   network_alias = ["grafana"]
@@ -43,7 +43,7 @@ data "docker_registry_image" "grafana" {
 }
 
 resource "docker_volume" "grafana_data" {
-  name = "zucchini-grafana-data"
+  name = "zucchini_grafana_data"
 
   lifecycle {
     # Don't fuck my database

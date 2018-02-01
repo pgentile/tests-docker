@@ -1,7 +1,7 @@
 ##### Chronograf #####
 
 resource "docker_container" "chronograf" {
-  name = "zucchini-chronograf"
+  name = "zucchini_chronograf"
 
   image         = "${docker_image.chronograf.latest}"
   network_alias = ["chronograf"]

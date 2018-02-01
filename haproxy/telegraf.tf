@@ -1,7 +1,7 @@
 ##### Telegraf #####
 
 resource "docker_container" "telegraf" {
-  name = "zucchini-telegraf"
+  name = "zucchini_telegraf"
 
   image         = "${docker_image.telegraf.latest}"
   network_alias = ["telegraf"]
@@ -31,6 +31,6 @@ data "docker_registry_image" "telegraf" {
 }
 
 resource "docker_network" "telegraf" {
-  name     = "zucchini-telegraf"
+  name     = "zucchini_telegraf"
   internal = true
 }
