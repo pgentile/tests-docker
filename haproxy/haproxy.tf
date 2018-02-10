@@ -35,8 +35,8 @@ resource "docker_container" "haproxy" {
   }
 
   upload {
-    file = "/usr/local/etc/haproxy/cert.pem"
-    content = "${tls_self_signed_cert.haproxy_cert.cert_pem}${tls_private_key.haproxy_key.private_key_pem}"
+    file    = "/usr/local/etc/haproxy/cert.pem"
+    content = "${tls_locally_signed_cert.haproxy.cert_pem}${tls_private_key.haproxy.private_key_pem}"
   }
 }
 
@@ -48,16 +48,19 @@ data "template_file" "haproxy_config" {
   }
 }
 
-resource "tls_self_signed_cert" "haproxy_cert" {
-  key_algorithm   = "RSA"
-  private_key_pem = "${tls_private_key.haproxy_key.private_key_pem}"
+resource "tls_self_signed_cert" "ca" {
+  key_algorithm   = "${tls_private_key.ca.algorithm}"
+  private_key_pem = "${tls_private_key.ca.private_key_pem}"
 
   subject {
-    common_name  = "localhost"
-    organization = "Zucchini"
+    common_name  = "Zucchini Inc. CA"
+    organization = "Zucchini Inc."
+    locality     = "Nantes"
+    country      = "FR"
   }
 
-  validity_period_hours = 24
+  validity_period_hours = "${24 * 7}"
+  is_ca_certificate     = true
 
   allowed_uses = [
     "key_encipherment",
@@ -66,24 +69,40 @@ resource "tls_self_signed_cert" "haproxy_cert" {
   ]
 }
 
-resource "tls_private_key" "haproxy_key" {
+resource "tls_cert_request" "haproxy" {
+  key_algorithm   = "RSA"
+  private_key_pem = "${tls_private_key.haproxy.private_key_pem}"
+
+  subject {
+    common_name  = "localhost"
+    organization = "Zucchini Inc."
+    locality     = "Nantes"
+    country      = "FR"
+  }
+
+  dns_names = ["localhost"]
+}
+
+resource "tls_private_key" "haproxy" {
   algorithm = "RSA"
-  rsa_bits = 2048
+  rsa_bits  = 2048
 
   # Can't serve these certificates with HaProxy
   # algorithm   = "ECDSA"
   # ecdsa_curve = "P384"
 }
 
-resource "local_file" "haproxy_cert" {
-    content     = "${tls_self_signed_cert.haproxy_cert.cert_pem}"
-    filename = "./tls/cert.pem"
+resource "local_file" "haproxy" {
+  content  = "${tls_locally_signed_cert.haproxy.cert_pem}"
+  filename = "./tls/haproxy.pem"
 }
 
+/*
 resource "local_file" "haproxy_key" {
     content     = "${tls_private_key.haproxy_key.private_key_pem}"
     filename = "./tls/key.pem"
 }
+*/
 
 output "haproxy_url" {
   description = "HAProxy URL"

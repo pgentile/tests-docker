@@ -21,7 +21,6 @@ resource "docker_container" "zucchini" {
     external = "${var.zucchini_admin_port + count.index}"
     internal = 8081
   }
-  
 }
 
 resource "docker_image" "zucchini" {

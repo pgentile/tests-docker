@@ -1,4 +1,4 @@
 module "syslogng_haproxy" {
   source = "./syslogng"
-  name = "zucchini_haproxy"
+  name   = "zucchini_haproxy"
 }
