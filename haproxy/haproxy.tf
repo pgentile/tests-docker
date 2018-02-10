@@ -20,13 +20,23 @@ resource "docker_container" "haproxy" {
   }
 
   ports {
+    internal = 443
+    external = "${var.haproxy_public_secure_port}"
+  }
+
+  ports {
     internal = 8081
     external = "${var.haproxy_stats_port}"
   }
 
   upload {
-    content = "${data.template_file.haproxy_config.rendered}"
     file    = "/usr/local/etc/haproxy/haproxy.cfg"
+    content = "${data.template_file.haproxy_config.rendered}"
+  }
+
+  upload {
+    file = "/usr/local/etc/haproxy/cert.pem"
+    content = "${tls_self_signed_cert.haproxy_cert.cert_pem}${tls_private_key.haproxy_key.private_key_pem}"
   }
 }
 
@@ -38,9 +48,51 @@ data "template_file" "haproxy_config" {
   }
 }
 
+resource "tls_self_signed_cert" "haproxy_cert" {
+  key_algorithm   = "RSA"
+  private_key_pem = "${tls_private_key.haproxy_key.private_key_pem}"
+
+  subject {
+    common_name  = "localhost"
+    organization = "Zucchini"
+  }
+
+  validity_period_hours = 24
+
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+  ]
+}
+
+resource "tls_private_key" "haproxy_key" {
+  algorithm = "RSA"
+  rsa_bits = 2048
+
+  # Can't serve these certificates with HaProxy
+  # algorithm   = "ECDSA"
+  # ecdsa_curve = "P384"
+}
+
+resource "local_file" "haproxy_cert" {
+    content     = "${tls_self_signed_cert.haproxy_cert.cert_pem}"
+    filename = "./tls/cert.pem"
+}
+
+resource "local_file" "haproxy_key" {
+    content     = "${tls_private_key.haproxy_key.private_key_pem}"
+    filename = "./tls/key.pem"
+}
+
 output "haproxy_url" {
   description = "HAProxy URL"
   value       = "http://localhost:${var.haproxy_public_port}"
+}
+
+output "haproxy_secure_url" {
+  description = "HAProxy secure URL"
+  value       = "https://localhost:${var.haproxy_public_secure_port}"
 }
 
 output "haproxy_stats_url" {

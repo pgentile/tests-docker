@@ -2,6 +2,22 @@ global
     # Log to the syslog-ng sidecar container
     log syslogng:514 local5
 
+    # SSL config : see https://www.haproxy.com/fr/documentation/aloha/7-0/traffic-management/lb-layer7/tls/
+    # Best TLS practises : https://wiki.mozilla.org/Security/Server_Side_TLS
+
+    # Disable SSLv3
+    ssl-default-bind-options ssl-min-ver TLSv1.1
+
+    # Ciphers
+    ssl-default-bind-ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK
+
+    # Increase TLS session cache size and lifetime to avoid computing too many symmetric keys
+    ### tune.ssl.cachesize 100000
+	### tune.ssl.lifetime 600
+
+    # No warning on startup
+    tune.ssl.default-dh-param 2048
+
 
 # Share config for next blocks using a defaults block
 defaults
@@ -29,8 +45,9 @@ resolvers dns
 
 
 listen stats
-    bind *:8081
     maxconn 50
+
+    bind *:8081
 
     stats enable
     stats uri '/haproxy'
@@ -43,11 +60,18 @@ listen stats
 
 
 frontend frontend-zucchini
-    ### Add X-Forwarded-For header
-    ### option  forwardfor
+    maxconn 300
 
     bind *:8080
-    maxconn 300
+    bind *:443 ssl crt /usr/local/etc/haproxy/cert.pem alpn http/1.1
+
+    # Dropwizard, used by Zucchini, understands X-Forwarded-* headers
+    # See http://www.dropwizard.io/1.2.2/docs/manual/configuration.html
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+
+    # Non secure traffic to secure
+    ### http-request redirect scheme https if { !ssl_fc }
 
     default_backend backend-zucchini
 
@@ -69,7 +93,7 @@ backend backend-zucchini
     option httpchk GET '/healthcheck'
     http-check send-state
 
-    # Redirect web sockets to one server only (state not shared by zucchini)
+    # Redirect web sockets to one server only (state is not shared by Zucchini)
     acl is_connection_upgrade req.hdr(Connection) -i Upgrade
     acl is_websocket req.hdr(Upgrade) -i WebSocket
     use-server srv-zucchini-instance-1 if is_connection_upgrade is_websocket

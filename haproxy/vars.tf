@@ -12,7 +12,12 @@ variable "grafana_port" {
 
 variable "haproxy_public_port" {
   description = "HAProxy - Public port"
-  default     = 8080
+  default     = 80
+}
+
+variable "haproxy_public_secure_port" {
+  description = "HAProxy - Public secure port"
+  default     = 443
 }
 
 variable "haproxy_stats_port" {
