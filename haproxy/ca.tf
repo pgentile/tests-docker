@@ -7,14 +7,19 @@ resource "tls_private_key" "ca" {
   # ecdsa_curve = "P384"
 }
 
-resource "tls_locally_signed_cert" "haproxy" {
-  cert_request_pem = "${tls_cert_request.haproxy.cert_request_pem}"
+resource "tls_self_signed_cert" "ca" {
+  key_algorithm   = "${tls_private_key.ca.algorithm}"
+  private_key_pem = "${tls_private_key.ca.private_key_pem}"
 
-  ca_cert_pem        = "${tls_self_signed_cert.ca.cert_pem}"
-  ca_key_algorithm   = "${tls_private_key.ca.algorithm}"
-  ca_private_key_pem = "${tls_private_key.ca.private_key_pem}"
+  subject {
+    common_name  = "Zucchini Inc. CA"
+    organization = "Zucchini Inc."
+    locality     = "Nantes"
+    country      = "FR"
+  }
 
-  validity_period_hours = 24
+  validity_period_hours = "${24 * 7}"
+  is_ca_certificate     = true
 
   allowed_uses = [
     "key_encipherment",
