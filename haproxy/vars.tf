@@ -30,6 +30,11 @@ variable "nginx_port" {
   default     = 8090
 }
 
+variable "nginx_secure_port" {
+  description = "nginx - Secure port"
+  default     = 8091
+}
+
 variable "zucchini_public_port" {
   description = "Zucchini - Public port"
   default     = 9000

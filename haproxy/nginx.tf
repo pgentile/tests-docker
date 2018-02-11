@@ -16,10 +16,33 @@ resource "docker_container" "nginx" {
     external = "${var.nginx_port}"
   }
 
+  ports {
+    internal = 443
+    external = "${var.nginx_secure_port}"
+  }
+
   upload {
     content = "${file("nginx/default.conf")}"
     file    = "/etc/nginx/conf.d/default.conf"
   }
+
+  upload {
+    file    = "/usr/nginx/certs/localhost.cert.pem"
+    content = "${module.nginx_cert.cert_pem}"
+  }
+
+  upload {
+    file    = "/usr/nginx/certs/localhost.key.pem"
+    content = "${module.nginx_cert.private_key_pem}"
+  }
+}
+
+module "nginx_cert" {
+  source             = "./servercert"
+  dns_names          = ["localhost"]
+  ca_cert_pem        = "${tls_self_signed_cert.ca.cert_pem}"
+  ca_key_algorithm   = "${tls_private_key.ca.algorithm}"
+  ca_private_key_pem = "${tls_private_key.ca.private_key_pem}"
 }
 
 data "docker_registry_image" "nginx" {
