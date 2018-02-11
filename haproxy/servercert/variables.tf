@@ -1,10 +1,10 @@
 variable "dns_names" {
-  description = "DNS names of the server"
+  description = "DNS names of the server. First name will be the certificate common name"
   type        = "list"
 }
 
 variable "ca_key_algorithm" {
-  description = "CA certificate PEM"
+  description = "CA certificate algorithm"
   type        = "string"
 }
 

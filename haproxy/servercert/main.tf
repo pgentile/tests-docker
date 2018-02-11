@@ -19,7 +19,7 @@ resource "tls_cert_request" "cert_request" {
   private_key_pem = "${tls_private_key.private_key.private_key_pem}"
 
   subject {
-    common_name  = "${element(var.dns_names, 0)}"
+    common_name  = "${var.dns_names[0]}"
     organization = "Zucchini Inc."
     locality     = "Nantes"
     country      = "FR"

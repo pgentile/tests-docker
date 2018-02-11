@@ -35,7 +35,7 @@ resource "docker_container" "haproxy" {
   }
 
   upload {
-    file    = "/usr/local/etc/haproxy/cert.pem"
+    file    = "/usr/local/etc/haproxy/certs/localhost.pem"
     content = "${module.haproxy_cert.bundle_pem}"
   }
 }

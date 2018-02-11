@@ -63,7 +63,7 @@ frontend frontend-zucchini
     maxconn 300
 
     bind *:8080
-    bind *:443 ssl crt /usr/local/etc/haproxy/cert.pem alpn http/1.1
+    bind *:443 ssl crt /usr/local/etc/haproxy/certs/ alpn http/1.1
 
     # Dropwizard, used by Zucchini, understands X-Forwarded-* headers
     # See http://www.dropwizard.io/1.2.2/docs/manual/configuration.html
