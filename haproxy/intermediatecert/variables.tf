@@ -1,6 +1,6 @@
-variable "dns_names" {
-  description = "DNS names of the server. First name will be the certificate common name"
-  type        = "list"
+variable "name" {
+  description = "Name of the intermediate certificate"
+  type        = "string"
 }
 
 variable "ca_key_algorithm" {
@@ -11,12 +11,6 @@ variable "ca_key_algorithm" {
 variable "ca_cert_pem" {
   description = "CA cert PEM"
   type        = "string"
-}
-
-variable "cert_chain_pem" {
-  description = "Certificate chain PEM"
-  type        = "string"
-  default = ""
 }
 
 variable "ca_private_key_pem" {

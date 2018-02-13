@@ -22,9 +22,9 @@ resource "tls_self_signed_cert" "ca" {
   is_ca_certificate     = true
 
   allowed_uses = [
-    "key_encipherment",
     "digital_signature",
-    "server_auth",
+    "cert_signing",
+    "crl_signing",
   ]
 }
 
