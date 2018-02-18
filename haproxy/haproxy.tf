@@ -66,7 +66,7 @@ module "haproxy_intermediate_cert" {
 }
 
 resource "local_file" "haproxy" {
-  content  = "${module.haproxy_cert.bundle_pem}"
+  content  = "${module.haproxy_cert.cert_chain_pem}"
   filename = "./tls/haproxy.pem"
 }
 

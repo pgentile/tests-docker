@@ -12,3 +12,8 @@ output "bundle_pem" {
   description = "Bundle PEM (cert and private key)"
   value       = "${tls_private_key.private_key.private_key_pem}${tls_locally_signed_cert.cert.cert_pem}${coalesce(var.cert_chain_pem, var.ca_cert_pem)}"
 }
+
+output "cert_chain_pem" {
+  description = "Certificate chain PEM"
+  value       = "${tls_locally_signed_cert.cert.cert_pem}${coalesce(var.cert_chain_pem, var.ca_cert_pem)}"
+}
