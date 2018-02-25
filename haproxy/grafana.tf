@@ -14,7 +14,6 @@ resource "docker_container" "grafana" {
     "${docker_network.influxdb.id}",
   ]
 
-  # GF_PATHS_PROVISIONING will be available with future Grafana 5 release
   env = [
     "GF_DEFAULT_INSTANCE_NAME=Zucchini",
     "GF_SECURITY_ADMIN_USER=admin",
@@ -31,6 +30,12 @@ resource "docker_container" "grafana" {
     container_path = "/var/lib/grafana"
     volume_name    = "${docker_volume.grafana_data.name}"
   }
+
+  upload {
+    file    = "/etc/grafana/provisioning/datasources/influxdb.yaml"
+    content = "${file("./grafana/influxdb.yaml")}"
+  }
+
 }
 
 resource "docker_image" "grafana" {
