@@ -7,6 +7,7 @@ resource "docker_container" "nginx" {
   networks = [
     "${docker_network.nginx.id}",
     "${docker_network.app.id}",
+    "${docker_network.telegraf.id}",
   ]
 
   network_alias = ["nginx"]

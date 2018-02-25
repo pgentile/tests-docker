@@ -1,5 +1,9 @@
 ##### Grafana #####
 
+locals {
+  grafana_version = "5.0.0-beta4"
+}
+
 resource "docker_container" "grafana" {
   name = "zucchini_grafana"
 
@@ -15,7 +19,7 @@ resource "docker_container" "grafana" {
     "GF_DEFAULT_INSTANCE_NAME=Zucchini",
     "GF_SECURITY_ADMIN_USER=admin",
     "GF_SECURITY_ADMIN_PASSWORD=password",
-    "GF_ALERTING_ENABLED=false",
+    "GF_ALERTING_ENABLED=true",
   ]
 
   ports {
@@ -39,7 +43,7 @@ resource "docker_image" "grafana" {
 }
 
 data "docker_registry_image" "grafana" {
-  name = "grafana/grafana:latest"
+  name = "grafana/grafana:${local.grafana_version}"
 }
 
 resource "docker_volume" "grafana_data" {

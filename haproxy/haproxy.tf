@@ -15,7 +15,7 @@ resource "docker_container" "haproxy" {
   ]
 
   ports {
-    internal = 8080
+    internal = 80
     external = "${var.haproxy_public_port}"
   }
 

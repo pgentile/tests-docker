@@ -6,7 +6,7 @@ global
     # Best TLS practises : https://wiki.mozilla.org/Security/Server_Side_TLS
 
     # Disable SSLv3
-    ssl-default-bind-options ssl-min-ver TLSv1.1
+    ssl-default-bind-options ssl-min-ver TLSv1.2
 
     # Ciphers
     ssl-default-bind-ciphers ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK
@@ -62,7 +62,7 @@ listen stats
 frontend frontend-zucchini
     maxconn 300
 
-    bind *:8080
+    bind *:80
     bind *:443 ssl crt /usr/local/etc/haproxy/certs/ alpn http/1.1
 
     # Dropwizard, used by Zucchini, understands X-Forwarded-* headers
@@ -71,7 +71,8 @@ frontend frontend-zucchini
     http-request add-header X-Forwarded-Proto https if { ssl_fc }
 
     # Non secure traffic to secure
-    ### http-request redirect scheme https if { !ssl_fc }
+    acl is_non_secure ssl_fc,not
+    http-request redirect scheme https if is_non_secure
 
     default_backend backend-zucchini
 
