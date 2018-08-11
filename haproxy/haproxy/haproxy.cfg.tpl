@@ -70,11 +70,19 @@ frontend frontend-zucchini
     http-request set-header X-Forwarded-Port %[dst_port]
     http-request add-header X-Forwarded-Proto https if { ssl_fc }
 
+    # Redirect to the main UI page
+    acl should_display_ui path / /ui
+    http-request redirect location /ui/ code 303 if should_display_ui
+
     # Non secure traffic to secure
     acl is_non_secure ssl_fc,not
     http-request redirect scheme https if is_non_secure
 
-    default_backend backend-zucchini
+    # All Zucchini UI to assets servers
+    acl assets path_beg /ui/assets/
+    use_backend backend-zucchini-assets if assets
+
+    default_backend backend-zucchini-services
 
     errorfile 503 '/usr/local/etc/haproxy/responses/503.http'
 
@@ -90,17 +98,25 @@ frontend frontend-zucchini
     http-response add-header 'X-About-HaProxy' '%H %f/%b/%s %fi:%fp/%si:%sp'
 
 
-backend backend-zucchini
+backend backend-zucchini-assets
+    ### option httpchk GET '/ui/'
+    ### http-check send-state
+
+    # Please note that the generated server name doesn't match the container name
+    server-template srv-zucchini-assets-instance- 1-1 nginx:80 init-addr none resolvers dns weight 2 minconn 1 maxconn 50 maxqueue 100
+
+
+backend backend-zucchini-services
     option httpchk GET '/healthcheck'
     http-check send-state
 
     # Redirect web sockets to one server only (state is not shared by Zucchini)
     acl is_connection_upgrade req.hdr(Connection) -i Upgrade
     acl is_websocket req.hdr(Upgrade) -i WebSocket
-    use-server srv-zucchini-instance-1 if is_connection_upgrade is_websocket
+    use-server srv-zucchini-services-instance-1 if is_connection_upgrade is_websocket
 
     # The first server receive all Web Sockets
-    server srv-zucchini-instance-1 zucchini:8080 check port 8081 init-addr none resolvers dns weight 1 minconn 1 maxconn 50 maxqueue 100
+    server srv-zucchini-services-instance-1 zucchini:8080 check port 8081 init-addr none resolvers dns weight 1 minconn 1 maxconn 50 maxqueue 100
 
     # Please note that the generated server name doesn't match the container name
-    server-template srv-zucchini-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2 minconn 1 maxconn 50 maxqueue 100
+    server-template srv-zucchini-services-instance- 2-${app_count} zucchini:8080 check port 8081 init-addr none resolvers dns weight 2 minconn 1 maxconn 50 maxqueue 100
