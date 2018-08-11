@@ -4,6 +4,7 @@ var result = rs.initiate({
     {
       _id: 0,
       host: "mongo1",
+      priority: 2,
       tags: {
         type: 'data',
       },
@@ -11,6 +12,7 @@ var result = rs.initiate({
     {
       _id: 1,
       host: "mongo2",
+      priority: 1,
       tags: {
         type: 'data',
       },
@@ -18,6 +20,7 @@ var result = rs.initiate({
     {
       _id: 2,
       host: "mongo3",
+      priority: 1,
       tags: {
         type: 'data',
       },
