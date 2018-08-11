@@ -11,6 +11,11 @@ resource "docker_container" "telegraf" {
     "${docker_network.telegraf.id}",
   ]
 
+  volumes {
+    host_path      = "/var/run/docker.sock"
+    container_path = "/var/run/docker.sock"
+  }
+
   upload {
     content = "${file("telegraf/telegraf.conf")}"
     file    = "/etc/telegraf/telegraf.conf"

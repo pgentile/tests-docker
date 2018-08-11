@@ -51,15 +51,6 @@ data "template_file" "haproxy_config" {
 module "haproxy_cert" {
   source             = "./servercert"
   dns_names          = ["localhost"]
-  ca_cert_pem        = "${module.haproxy_intermediate_cert.cert_pem}"
-  ca_key_algorithm   = "${module.haproxy_intermediate_cert.algorithm}"
-  ca_private_key_pem = "${module.haproxy_intermediate_cert.private_key_pem}"
-  cert_chain_pem     = "${module.haproxy_intermediate_cert.cert_chain_pem}"
-}
-
-module "haproxy_intermediate_cert" {
-  source             = "./intermediatecert"
-  name               = "Zucchini intermediate authority"
   ca_cert_pem        = "${tls_self_signed_cert.ca.cert_pem}"
   ca_key_algorithm   = "${tls_private_key.ca.algorithm}"
   ca_private_key_pem = "${tls_private_key.ca.private_key_pem}"

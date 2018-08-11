@@ -16,7 +16,7 @@ variable "ca_cert_pem" {
 variable "cert_chain_pem" {
   description = "Certificate chain PEM"
   type        = "string"
-  default = ""
+  default     = ""
 }
 
 variable "ca_private_key_pem" {

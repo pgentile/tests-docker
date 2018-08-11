@@ -6,8 +6,8 @@ resource "tls_locally_signed_cert" "cert" {
   cert_request_pem = "${tls_cert_request.cert_request.cert_request_pem}"
 
   validity_period_hours = "${24 * 2}"
-  
-  is_ca_certificate     = true
+
+  is_ca_certificate = true
 
   allowed_uses = [
     "digital_signature",
@@ -26,7 +26,6 @@ resource "tls_cert_request" "cert_request" {
     locality     = "Nantes"
     country      = "FR"
   }
-
 }
 
 resource "tls_private_key" "private_key" {

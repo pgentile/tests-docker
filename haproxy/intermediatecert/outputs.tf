@@ -20,5 +20,5 @@ output "cert_chain_pem" {
 
 output "algorithm" {
   description = "Algorithm used"
-  value = "${var.ca_key_algorithm}"
+  value       = "${var.ca_key_algorithm}"
 }

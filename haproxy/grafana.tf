@@ -1,9 +1,5 @@
 ##### Grafana #####
 
-locals {
-  grafana_version = "5.0.0-beta4"
-}
-
 resource "docker_container" "grafana" {
   name = "zucchini_grafana"
 
@@ -35,7 +31,6 @@ resource "docker_container" "grafana" {
     file    = "/etc/grafana/provisioning/datasources/influxdb.yaml"
     content = "${file("./grafana/influxdb.yaml")}"
   }
-
 }
 
 resource "docker_image" "grafana" {
@@ -48,7 +43,7 @@ resource "docker_image" "grafana" {
 }
 
 data "docker_registry_image" "grafana" {
-  name = "grafana/grafana:${local.grafana_version}"
+  name = "grafana/grafana:5.1.0"
 }
 
 resource "docker_volume" "grafana_data" {
