@@ -6,7 +6,6 @@ resource "docker_container" "mongo" {
 
   networks = [
     "${docker_network.mongo.id}",
-    "${docker_network.telegraf.id}",
   ]
 
   network_alias = ["mongo"]

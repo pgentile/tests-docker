@@ -7,6 +7,8 @@ resource "docker_container" "telegraf" {
   network_alias = ["telegraf"]
 
   networks = [
+    "${docker_network.haproxy.id}",
+    "${docker_network.mongo.id}",
     "${docker_network.influxdb.id}",
     "${docker_network.telegraf.id}",
   ]

@@ -11,7 +11,6 @@ resource "docker_container" "haproxy" {
   networks = [
     "${docker_network.app.id}",
     "${module.syslogng_haproxy.network_id}",
-    "${docker_network.telegraf.id}",
   ]
 
   ports {
