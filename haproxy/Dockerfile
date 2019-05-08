@@ -1,7 +1,7 @@
 FROM haproxy:latest
 
 RUN apt-get update \
-    && apt-get install -y curl dnsutils iputils-ping \
+    && apt-get install -y curl dnsutils iputils-ping socat \
     && rm -rf /var/lib/apt/lists/*
 
 COPY ./haproxy/responses /usr/local/etc/haproxy/responses

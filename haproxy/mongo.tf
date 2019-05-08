@@ -17,7 +17,7 @@ resource "docker_container" "mongo" {
 }
 
 data "docker_registry_image" "mongo" {
-  name = "mongo:3"
+  name = "mongo:4"
 }
 
 resource "docker_image" "mongo" {

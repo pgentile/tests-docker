@@ -1,6 +1,6 @@
 global
-    # Log to the syslog-ng sidecar container
-    log syslogng:514 local5
+    # Log to stdout
+    log stdout local0
 
     # SSL config : see https://www.haproxy.com/fr/documentation/aloha/7-0/traffic-management/lb-layer7/tls/
     # Best TLS practises : https://wiki.mozilla.org/Security/Server_Side_TLS
@@ -63,7 +63,7 @@ frontend frontend-zucchini
     maxconn 300
 
     bind *:80
-    bind *:443 ssl crt /usr/local/etc/haproxy/certs/ alpn http/1.1
+    bind *:443 ssl crt /usr/local/etc/haproxy/certs/ alpn h2,http/1.1
 
     # Dropwizard, used by Zucchini, understands X-Forwarded-* headers
     # See http://www.dropwizard.io/1.2.2/docs/manual/configuration.html
@@ -80,7 +80,8 @@ frontend frontend-zucchini
 
     # All Zucchini UI to assets servers
     acl assets path_beg /ui/assets/
-    use_backend backend-zucchini-assets if assets
+    ### Ne fonctionne pas bien en HTTP/2 avec Nginx
+    ### use_backend backend-zucchini-assets if assets
 
     default_backend backend-zucchini-services
 
